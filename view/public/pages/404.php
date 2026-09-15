@@ -1,0 +1,1 @@
+<div class="page-shell"><section class="empty-state"><span><i class="ri-compass-3-line"></i></span><p class="eyebrow">KESALAHAN 404</p><h1>Halaman tidak ditemukan<span>.</span></h1><p>Alamat yang Anda buka tidak tersedia atau telah dipindahkan.</p><a class="primary-button" href="?page=dashboard"><i class="ri-home-4-line"></i>Kembali ke Dashboard</a></section></div>

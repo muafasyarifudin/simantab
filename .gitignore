@@ -1,0 +1,20 @@
+# Uploads & User Generated Files
+/content/uploads/*
+!/content/uploads/.gitkeep
+/assets/uploads/letters/*
+!/assets/uploads/letters/.gitkeep
+
+# Storage & Logs
+/storage/*.log
+/storage/sessions/*
+!/storage/sessions/.gitkeep
+
+# Environment & Credentials
+.env
+*.env.local
+
+# IDE & OS Files
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
