@@ -105,28 +105,37 @@
   };
 
   // ==========================================
-  // SIDEBAR EXPAND & COLLAPSE (DESKTOP)
+  // UNIFIED SIDEBAR TOGGLE (DESKTOP COLLAPSE & MOBILE DRAWER)
   // ==========================================
-  const collapseBtn = document.getElementById('sidebarCollapseBtn');
-  const collapseIcon = document.getElementById('sidebarCollapseIcon');
+  window.toggleMainSidebar = function() {
+    const isMobile = window.innerWidth <= 1100;
+    const sidebar = document.getElementById('appSidebar');
+    const backdrop = document.querySelector('.sidebar-backdrop');
+    const icon = document.getElementById('sidebarToggleIcon');
+
+    if (isMobile) {
+      if (sidebar) sidebar.classList.toggle('open');
+      if (backdrop) backdrop.classList.toggle('show');
+    } else {
+      document.body.classList.toggle('sidebar-collapsed');
+      const isCollapsed = document.body.classList.contains('sidebar-collapsed');
+      localStorage.setItem('simantap-sidebar-collapsed', isCollapsed ? '1' : '0');
+      if (icon) icon.className = isCollapsed ? 'ri-menu-unfold-line' : 'ri-menu-2-line';
+    }
+  };
+
   const initSidebarState = () => {
     const isCollapsed = localStorage.getItem('simantap-sidebar-collapsed') === '1';
-    if (isCollapsed) {
+    const isMobile = window.innerWidth <= 1100;
+    const icon = document.getElementById('sidebarToggleIcon');
+    if (!isMobile && isCollapsed) {
       document.body.classList.add('sidebar-collapsed');
-      if (collapseIcon) collapseIcon.className = 'ri-menu-unfold-line';
+      if (icon) icon.className = 'ri-menu-unfold-line';
     } else {
-      document.body.classList.remove('sidebar-collapsed');
-      if (collapseIcon) collapseIcon.className = 'ri-menu-fold-line';
+      if (icon) icon.className = 'ri-menu-2-line';
     }
   };
   initSidebarState();
-
-  collapseBtn?.addEventListener('click', () => {
-    document.body.classList.toggle('sidebar-collapsed');
-    const isCollapsed = document.body.classList.contains('sidebar-collapsed');
-    localStorage.setItem('simantap-sidebar-collapsed', isCollapsed ? '1' : '0');
-    if (collapseIcon) collapseIcon.className = isCollapsed ? 'ri-menu-unfold-line' : 'ri-menu-fold-line';
-  });
 
   // ==========================================
   // DYNAMIC TAB SWITCHER (GENERIC)
