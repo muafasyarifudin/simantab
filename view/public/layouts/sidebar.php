@@ -12,7 +12,7 @@ $totalPendingReports = isset($assignments) ? count(array_filter($assignments, fn
    <p class="nav-title">MANAJEMEN SURAT</p>
    <a class="nav-link <?= active_route(['documents','document-detail']) ?>" href="?page=documents" title="Semua Surat"><span class="nav-icon teal"><i class="ri-file-list-3-line"></i></span><span>Semua Surat</span><span class="nav-count"><?= $totalDocuments ?></span></a>
    <a class="nav-link <?= active_route('create-document') ?>" href="?page=create-document" title="Buat Surat"><span class="nav-icon blue"><i class="ri-file-add-line"></i></span><span>Buat Surat</span></a>
-   <a class="nav-link <?= active_route('approvals') ?>" href="?page=approvals" title="Persetujuan"><span class="nav-icon amber"><i class="ri-file-check-line"></i></span><span>Persetujuan</span><?php if ($totalApprovals > 0): ?><span class="nav-count danger"><?= $totalApprovals ?></span><?php endif; ?></a>
+   <a class="nav-link <?= active_route('approvals') ?>" href="?page=approvals" title="Persetujuan"><span class="nav-icon amber"><i class="ri-checkbox-circle-line"></i></span><span>Persetujuan</span><?php if ($totalApprovals > 0): ?><span class="nav-count danger"><?= $totalApprovals ?></span><?php endif; ?></a>
    <a class="nav-link <?= active_route('archive') ?>" href="?page=archive" title="Arsip Digital"><span class="nav-icon violet"><i class="ri-archive-line"></i></span><span>Arsip Digital</span></a>
    <p class="nav-title">PENUGASAN</p>
    <a class="nav-link <?= active_route('assignments') ?>" href="?page=assignments" title="Penugasan"><span class="nav-icon rose"><i class="ri-briefcase-4-line"></i></span><span>Penugasan</span><?php if ($totalAssignments > 0): ?><span class="nav-count"><?= $totalAssignments ?></span><?php endif; ?></a>

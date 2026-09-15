@@ -18,7 +18,7 @@ $assignments = [
  ['title'=>'Pemutakhiran Data Akademik','number'=>'041/ST/LPSI/UMPO/IX/2026','date'=>'10–12 Sep 2026','location'=>'LPSI','progress'=>100,'status'=>'Selesai','team'=>4],
 ];
 $notifications = [
- ['icon'=>'ri-file-check-line','tone'=>'amber','title'=>'Surat menunggu persetujuan','text'=>'Penugasan Tim Audit Infrastruktur TI memerlukan tindakan Anda.','time'=>'8 menit lalu','unread'=>true],
+ ['icon'=>'ri-checkbox-circle-line','tone'=>'amber','title'=>'Surat menunggu persetujuan','text'=>'Penugasan Tim Audit Infrastruktur TI memerlukan tindakan Anda.','time'=>'8 menit lalu','unread'=>true],
  ['icon'=>'ri-edit-box-line','tone'=>'rose','title'=>'Dokumen perlu revisi','text'=>'Perbaiki periode laporan dan lampiran pendukung.','time'=>'1 jam lalu','unread'=>true],
  ['icon'=>'ri-calendar-event-line','tone'=>'violet','title'=>'Agenda dimulai besok','text'=>'Pendampingan Akreditasi Program Studi pukul 08.00 WIB.','time'=>'3 jam lalu','unread'=>false],
 ];
