@@ -104,6 +104,60 @@
     }
   };
 
+  // ==========================================
+  // SIDEBAR EXPAND & COLLAPSE (DESKTOP)
+  // ==========================================
+  const collapseBtn = document.getElementById('sidebarCollapseBtn');
+  const collapseIcon = document.getElementById('sidebarCollapseIcon');
+  const initSidebarState = () => {
+    const isCollapsed = localStorage.getItem('simantap-sidebar-collapsed') === '1';
+    if (isCollapsed) {
+      document.body.classList.add('sidebar-collapsed');
+      if (collapseIcon) collapseIcon.className = 'ri-menu-unfold-line';
+    } else {
+      document.body.classList.remove('sidebar-collapsed');
+      if (collapseIcon) collapseIcon.className = 'ri-menu-fold-line';
+    }
+  };
+  initSidebarState();
+
+  collapseBtn?.addEventListener('click', () => {
+    document.body.classList.toggle('sidebar-collapsed');
+    const isCollapsed = document.body.classList.contains('sidebar-collapsed');
+    localStorage.setItem('simantap-sidebar-collapsed', isCollapsed ? '1' : '0');
+    if (collapseIcon) collapseIcon.className = isCollapsed ? 'ri-menu-unfold-line' : 'ri-menu-fold-line';
+  });
+
+  // ==========================================
+  // DYNAMIC TAB SWITCHER (GENERIC)
+  // ==========================================
+  window.switchSummaryTab = function(targetTabId, btn) {
+    const tabContainer = btn?.closest('.summary-tabs') || document.querySelector('.summary-tabs');
+    if (tabContainer) {
+      tabContainer.querySelectorAll('button').forEach(b => b.classList.remove('active'));
+      if (btn) btn.classList.add('active');
+    }
+
+    const panes = document.querySelectorAll('[data-tab-pane]');
+    if (panes.length > 0) {
+      panes.forEach(pane => {
+        if (pane.dataset.tabPane === targetTabId) {
+          pane.style.display = 'block';
+          pane.classList.add('active');
+        } else {
+          pane.style.display = 'none';
+          pane.classList.remove('active');
+        }
+      });
+    }
+
+    // Dynamic header action button text
+    const headerBtn = document.getElementById('mainPageActionBtn');
+    if (headerBtn && headerBtn.dataset[targetTabId + 'Text']) {
+      headerBtn.innerHTML = headerBtn.dataset[targetTabId + 'Text'];
+    }
+  };
+
   document.addEventListener('keydown', e => {
     if (e.key === 'Escape') {
       window.toggleNotificationDrawer(false);

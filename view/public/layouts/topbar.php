@@ -3,7 +3,8 @@ $user = $_SESSION['simantap_user'];
 $unreadNotificationsCount = count(array_filter($notifications ?? [], fn($n) => !empty($n['unread'])));
 ?>
 <header class="topbar">
- <button class="icon-button menu-toggle" id="menuToggle" aria-label="Buka menu"><i class="ri-menu-2-line"></i></button>
+ <button class="icon-button menu-toggle" id="menuToggle" aria-label="Buka menu mobile"><i class="ri-menu-2-line"></i></button>
+ <button class="icon-button d-none d-lg-inline-grid" id="sidebarCollapseBtn" aria-label="Kecilkan/Besarkan Sidebar" title="Expand / Collapse Sidebar"><i class="ri-menu-fold-line" id="sidebarCollapseIcon"></i></button>
  <div class="top-search"><i class="ri-search-line"></i><input id="globalSearch" type="search" placeholder="Cari nomor, perihal, pegawai..." aria-label="Pencarian global"><kbd>Ctrl K</kbd></div>
  <div class="top-actions">
   <button class="icon-button" id="themeToggle" aria-label="Ubah tema"><i class="ri-moon-line"></i></button>
