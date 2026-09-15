@@ -53,31 +53,57 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             'address' => trim((string)($_POST['address'] ?? $defaultAddress)),
             'contact' => trim((string)($_POST['contact'] ?? $defaultContact)),
             'heading' => trim((string)($_POST['heading'] ?? 'SURAT TUGAS')),
+            'heading_size' => $_POST['heading_size'] ?? '14pt',
             'kop_align' => $_POST['kop_align'] ?? 'center',
             'kop_line_style' => $_POST['kop_line_style'] ?? 'double',
+            'kop_line_weight' => $_POST['kop_line_weight'] ?? 'normal',
+            'kop_spacing' => $_POST['kop_spacing'] ?? 'normal',
+            'kop_inst1_size' => $_POST['kop_inst1_size'] ?? '14pt',
+            'kop_inst2_size' => $_POST['kop_inst2_size'] ?? '12pt',
+            'kop_address_size' => $_POST['kop_address_size'] ?? '9pt',
+            'kop_contact_size' => $_POST['kop_contact_size'] ?? '8.5pt',
             'logo_align' => $_POST['logo_align'] ?? 'left',
             'logo_size' => $_POST['logo_size'] ?? 'medium',
             'font_family' => $_POST['font_family'] ?? 'serif',
+            'paper_margin' => $_POST['paper_margin'] ?? 'normal',
             'custom_number' => $customNumber ?: '',
             'confidentiality' => $_POST['confidentiality'] ?? 'Biasa',
             'attachment' => trim((string)($_POST['attachment'] ?? '-')),
             'title' => trim((string)($_POST['title'] ?? '')),
+            'meta_font_size' => $_POST['meta_font_size'] ?? '11pt',
+            'date_size' => $_POST['date_size'] ?? '11pt',
             'recipient' => trim((string)($_POST['recipient'] ?? '')),
+            'recipient_size' => $_POST['recipient_size'] ?? '11pt',
             'greeting_opening' => trim((string)($_POST['greeting_opening'] ?? 'Dengan hormat,')),
+            'greeting_opening_size' => $_POST['greeting_opening_size'] ?? '11.5pt',
             'opening' => trim((string)($_POST['opening'] ?? '')),
+            'opening_size' => $_POST['opening_size'] ?? '11.5pt',
             'body' => trim((string)($_POST['body'] ?? '')),
+            'body_size' => $_POST['body_size'] ?? '11.5pt',
+            'body_line_height' => $_POST['body_line_height'] ?? '1.6',
+            'paragraph_spacing' => $_POST['paragraph_spacing'] ?? 'normal',
             'closing' => trim((string)($_POST['closing'] ?? '')),
+            'closing_size' => $_POST['closing_size'] ?? '11.5pt',
             'greeting_closing' => trim((string)($_POST['greeting_closing'] ?? 'Hormat kami,')),
+            'greeting_closing_size' => $_POST['greeting_closing_size'] ?? '11.5pt',
             'city' => trim((string)($_POST['city'] ?? $defaultCity)),
             'date' => $_POST['document_date'] ?? $defaultDate,
             'signer_position' => trim((string)($_POST['signer_position'] ?? 'Kepala LPSI')),
+            'signer_position_size' => $_POST['signer_position_size'] ?? '11.5pt',
             'signer_name' => trim((string)($_POST['signer_name'] ?? $defaultSignerName)),
+            'signer_name_size' => $_POST['signer_name_size'] ?? '12pt',
             'signer_number' => trim((string)($_POST['signer_number'] ?? 'NIDN. 0712058801')),
+            'signer_number_size' => $_POST['signer_number_size'] ?? '10pt',
             'signature_type' => $_POST['signature_type'] ?? 'image',
+            'signature_size' => $_POST['signature_size'] ?? 'medium',
+            'signature_space_height' => $_POST['signature_space_height'] ?? '80px',
             'stamp_position' => $_POST['stamp_position'] ?? 'left',
+            'stamp_size' => $_POST['stamp_size'] ?? 'medium',
             'stamp_opacity' => $_POST['stamp_opacity'] ?? '85',
             'copies' => trim((string)($_POST['copies'] ?? '')),
+            'copies_size' => $_POST['copies_size'] ?? '10pt',
             'footer_note' => trim((string)($_POST['footer_note'] ?? '')),
+            'footer_size' => $_POST['footer_size'] ?? '8.5pt',
             'logo' => LetterService::saveBase64Image((string)($_POST['logo_base64'] ?? ''), 'logo'),
             'logo_right' => LetterService::saveBase64Image((string)($_POST['logo_right_base64'] ?? ''), 'logo_r'),
             'signature' => LetterService::saveBase64Image((string)($_POST['signature_base64'] ?? ''), 'sign'),
@@ -142,10 +168,34 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <h1>Buat Surat Resmi<span>.</span></h1>
             <p>Konfigurasi penuh KOP, Logo, Garis Dinas, Identitas Surat, Konten, Tanda Tangan & Cap secara langsung (live preview).</p>
         </div>
-        <div class="builder-view-toggle">
-            <button type="button" class="active" data-view-mode="split" onclick="window.setWorkViewMode('split'); return false;"><i class="ri-layout-column-line"></i>Split Workbench</button>
-            <button type="button" data-view-mode="form" onclick="window.setWorkViewMode('form'); return false;"><i class="ri-edit-box-line"></i>Form Saja</button>
-            <button type="button" data-view-mode="preview" onclick="window.setWorkViewMode('preview'); return false;"><i class="ri-file-paper-line"></i>Kertas A4</button>
+        <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;">
+            <!-- Auto Save Status Badge -->
+            <div id="autoSaveStatus" class="autosave-badge saved">
+                <i class="ri-check-double-line"></i>
+                <span id="autoSaveText">Draf tersimpan otomatis</span>
+                <small id="autoSaveTime" style="opacity:0.8;font-size:10.5px;"></small>
+            </div>
+
+            <div class="builder-view-toggle">
+                <button type="button" class="active" data-view-mode="split" onclick="window.setWorkViewMode('split'); return false;"><i class="ri-layout-column-line"></i>Split Workbench</button>
+                <button type="button" data-view-mode="form" onclick="window.setWorkViewMode('form'); return false;"><i class="ri-edit-box-line"></i>Form Saja</button>
+                <button type="button" data-view-mode="preview" onclick="window.setWorkViewMode('preview'); return false;"><i class="ri-file-paper-line"></i>Kertas A4</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Draft Recovery Alert Banner (Muncul otomatis jika ada draf tersimpan dari sesi sebelumnya) -->
+    <div id="draftRecoveryAlert" class="draft-recovery-alert" style="display:none;">
+        <div class="draft-recovery-info">
+            <i class="ri-history-line"></i>
+            <div>
+                <strong>Draf Tersimpan Otomatis Ditemukan!</strong>
+                <p style="margin:2px 0 0;font-size:11.5px;color:var(--muted);" id="draftRecoveryMsg">Ditemukan draf yang belum disimpan dari sesi sebelumnya.</p>
+            </div>
+        </div>
+        <div class="draft-recovery-actions">
+            <button type="button" class="btn-restore-draft" id="btnRestoreDraft"><i class="ri-restart-line"></i> Pulihkan Draf</button>
+            <button type="button" class="btn-discard-draft" id="btnDiscardDraft"><i class="ri-delete-bin-line"></i> Buang Draf</button>
         </div>
     </div>
 
@@ -179,7 +229,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             <span class="section-icon blue"><i class="ri-file-settings-line"></i></span>
                             <div>
                                 <h3>Informasi Utama & Penomoran Dokumen</h3>
-                                <p>Tentukan jenis surat, nomor resmi, dan perihal dokumen.</p>
+                                <p>Tentukan jenis surat, nomor resmi, perihal dokumen, dan ukuran font metadata.</p>
                             </div>
                         </div>
 
@@ -195,7 +245,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             </div>
 
                             <div class="builder-field">
-                                <label>Judul Kategori / Heading Kertas</label>
+                                <div class="field-header-flex">
+                                    <label>Judul Heading Surat</label>
+                                    <div class="size-pill-group">
+                                        <span>Font:</span>
+                                        <select name="heading_size" id="heading_size" class="size-select-sm">
+                                            <option value="12pt">12 pt</option>
+                                            <option value="13pt">13 pt</option>
+                                            <option value="14pt" selected>14 pt (Standar)</option>
+                                            <option value="15pt">15 pt</option>
+                                            <option value="16pt">16 pt</option>
+                                            <option value="18pt">18 pt</option>
+                                        </select>
+                                    </div>
+                                </div>
                                 <input type="text" name="heading" id="heading" value="SURAT TUGAS" placeholder="Contoh: SURAT TUGAS / SURAT EDARAN">
                             </div>
 
@@ -240,12 +303,37 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             </div>
 
                             <div class="builder-field">
-                                <label>Lampiran</label>
-                                <input type="text" name="attachment" id="attachment" value="-" placeholder="Contoh: - atau 1 (satu) Berkas">
+                                <div class="field-header-flex">
+                                    <label>Ukuran Font Metadata (Nomor, Sifat, Hal)</label>
+                                    <div class="size-pill-group">
+                                        <span>Font:</span>
+                                        <select name="meta_font_size" id="meta_font_size" class="size-select-sm">
+                                            <option value="9.5pt">9.5 pt</option>
+                                            <option value="10pt">10 pt</option>
+                                            <option value="10.5pt">10.5 pt</option>
+                                            <option value="11pt" selected>11 pt (Standar)</option>
+                                            <option value="11.5pt">11.5 pt</option>
+                                            <option value="12pt">12 pt</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <input type="text" name="attachment" id="attachment" value="-" placeholder="Lampiran: - atau 1 Berkas">
                             </div>
 
                             <div class="builder-field">
-                                <label>Tanggal Surat <b>*</b></label>
+                                <div class="field-header-flex">
+                                    <label>Tanggal Surat <b>*</b></label>
+                                    <div class="size-pill-group">
+                                        <span>Font:</span>
+                                        <select name="date_size" id="date_size" class="size-select-sm">
+                                            <option value="9.5pt">9.5 pt</option>
+                                            <option value="10pt">10 pt</option>
+                                            <option value="10.5pt">10.5 pt</option>
+                                            <option value="11pt" selected>11 pt</option>
+                                            <option value="12pt">12 pt</option>
+                                        </select>
+                                    </div>
+                                </div>
                                 <input type="date" name="document_date" id="document_date" value="<?= $defaultDate ?>" required>
                             </div>
 
@@ -316,57 +404,108 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             <span class="section-icon blue"><i class="ri-layout-top-line"></i></span>
                             <div>
                                 <h3>Kepala Surat (KOP) & Tipografi</h3>
-                                <p>Kustomisasi teks KOP, instansi, alamat, dan pilihan font.</p>
+                                <p>Kustomisasi teks KOP, ukuran font tiap baris, perataan, dan margin kertas.</p>
                             </div>
                         </div>
 
                         <div class="builder-field full">
-                            <label>Nama Lembaga Induk / Instansi Atas (Baris 1) <b>*</b></label>
+                            <div class="field-header-flex">
+                                <label>Nama Lembaga Induk / Instansi Atas (Baris 1) <b>*</b></label>
+                                <div class="size-pill-group">
+                                    <span>Font:</span>
+                                    <select name="kop_inst1_size" id="kop_inst1_size" class="size-select-sm">
+                                        <option value="11pt">11 pt</option>
+                                        <option value="12pt">12 pt</option>
+                                        <option value="13pt">13 pt</option>
+                                        <option value="14pt" selected>14 pt (Standar)</option>
+                                        <option value="15pt">15 pt</option>
+                                        <option value="16pt">16 pt</option>
+                                        <option value="18pt">18 pt</option>
+                                        <option value="20pt">20 pt</option>
+                                    </select>
+                                </div>
+                            </div>
                             <input type="text" name="institution" id="kop_inst1" value="<?= e($defaultInst1) ?>" required>
                         </div>
 
                         <div class="builder-field full">
-                            <label>Nama Satuan Kerja / Unit / Fakultas (Baris 2)</label>
+                            <div class="field-header-flex">
+                                <label>Nama Satuan Kerja / Unit / Fakultas (Baris 2)</label>
+                                <div class="size-pill-group">
+                                    <span>Font:</span>
+                                    <select name="kop_inst2_size" id="kop_inst2_size" class="size-select-sm">
+                                        <option value="10pt">10 pt</option>
+                                        <option value="11pt">11 pt</option>
+                                        <option value="12pt" selected>12 pt (Standar)</option>
+                                        <option value="13pt">13 pt</option>
+                                        <option value="14pt">14 pt</option>
+                                        <option value="16pt">16 pt</option>
+                                    </select>
+                                </div>
+                            </div>
                             <input type="text" name="unit" id="kop_inst2" value="<?= e($defaultUnit) ?>">
                         </div>
 
                         <div class="builder-field full">
-                            <label>Alamat Lengkap KOP <b>*</b></label>
+                            <div class="field-header-flex">
+                                <label>Alamat Lengkap KOP <b>*</b></label>
+                                <div class="size-pill-group">
+                                    <span>Font:</span>
+                                    <select name="kop_address_size" id="kop_address_size" class="size-select-sm">
+                                        <option value="7.5pt">7.5 pt</option>
+                                        <option value="8pt">8 pt</option>
+                                        <option value="8.5pt">8.5 pt</option>
+                                        <option value="9pt" selected>9 pt (Standar)</option>
+                                        <option value="9.5pt">9.5 pt</option>
+                                        <option value="10pt">10 pt</option>
+                                    </select>
+                                </div>
+                            </div>
                             <textarea name="address" id="kop_address" rows="2" required><?= e($defaultAddress) ?></textarea>
                         </div>
 
                         <div class="builder-field full">
-                            <label>Kontak KOP (Telepon, Email, Website)</label>
+                            <div class="field-header-flex">
+                                <label>Kontak KOP (Telepon, Email, Website)</label>
+                                <div class="size-pill-group">
+                                    <span>Font:</span>
+                                    <select name="kop_contact_size" id="kop_contact_size" class="size-select-sm">
+                                        <option value="7pt">7 pt</option>
+                                        <option value="7.5pt">7.5 pt</option>
+                                        <option value="8pt">8 pt</option>
+                                        <option value="8.5pt" selected>8.5 pt (Standar)</option>
+                                        <option value="9pt">9 pt</option>
+                                        <option value="10pt">10 pt</option>
+                                    </select>
+                                </div>
+                            </div>
                             <input type="text" name="contact" id="kop_contact" value="<?= e($defaultContact) ?>">
                         </div>
 
-                        <div class="builder-grid-2">
+                        <div class="builder-grid-3">
                             <div class="builder-field">
                                 <label>Perataan KOP (Alignment)</label>
-                                <div class="pill-selector">
-                                    <label class="pill-opt selected">
-                                        <input type="radio" name="kop_align" value="center" checked>
-                                        <span><i class="ri-align-center"></i> Tengah (Standar)</span>
-                                    </label>
-                                    <label class="pill-opt">
-                                        <input type="radio" name="kop_align" value="left">
-                                        <span><i class="ri-align-left"></i> Rata Kiri</span>
-                                    </label>
-                                </div>
+                                <select name="kop_align" id="kop_align">
+                                    <option value="center" selected>Tengah (Standar)</option>
+                                    <option value="left">Rata Kiri</option>
+                                </select>
                             </div>
 
                             <div class="builder-field">
-                                <label>Gaya Huruf Dokumen (Font)</label>
-                                <div class="pill-selector">
-                                    <label class="pill-opt selected">
-                                        <input type="radio" name="font_family" value="serif" checked>
-                                        <span>Serif (Times Formal)</span>
-                                    </label>
-                                    <label class="pill-opt">
-                                        <input type="radio" name="font_family" value="sans">
-                                        <span>Sans-Serif (Modern)</span>
-                                    </label>
-                                </div>
+                                <label>Gaya Huruf (Font Family)</label>
+                                <select name="font_family" id="font_family">
+                                    <option value="serif" selected>Serif (Times Formal)</option>
+                                    <option value="sans">Sans-Serif (Modern)</option>
+                                </select>
+                            </div>
+
+                            <div class="builder-field">
+                                <label>Margin Lembar Kertas A4</label>
+                                <select name="paper_margin" id="paper_margin">
+                                    <option value="compact">Ringkas (1.8 cm)</option>
+                                    <option value="normal" selected>Standar Dinas (2.5 cm)</option>
+                                    <option value="spacious">Lebar / Luas (3.2 cm)</option>
+                                </select>
                             </div>
                         </div>
                     </section>
@@ -376,8 +515,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         <div class="builder-card-title">
                             <span class="section-icon emerald"><i class="ri-image-line"></i></span>
                             <div>
-                                <h3>Logo & Garis Pembatas KOP</h3>
-                                <p>Unggah lambang resmi dan atur garis pemisah standar dinas.</p>
+                                <h3>Logo, Garis Pembatas & Spasi KOP</h3>
+                                <p>Unggah lambang resmi, atur ukuran logo, jarak spasi, dan ketebalan garis.</p>
                             </div>
                         </div>
 
@@ -411,11 +550,32 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             </div>
 
                             <div class="builder-field">
-                                <label>Ukuran Logo</label>
+                                <label>Ukuran Dimensi Logo</label>
                                 <select name="logo_size" id="logo_size">
                                     <option value="small">Kecil (56 px)</option>
                                     <option value="medium" selected>Sedang (72 px)</option>
                                     <option value="large">Besar (88 px)</option>
+                                    <option value="xlarge">Ekstra Besar (104 px)</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="builder-grid-2" style="margin-top:6px;">
+                            <div class="builder-field">
+                                <label>Jarak Spasi KOP ke Garis</label>
+                                <select name="kop_spacing" id="kop_spacing">
+                                    <option value="compact">Rapat (2 mm)</option>
+                                    <option value="normal" selected>Normal (6 mm)</option>
+                                    <option value="spacious">Longgar (12 mm)</option>
+                                </select>
+                            </div>
+
+                            <div class="builder-field">
+                                <label>Ketebalan Garis KOP</label>
+                                <select name="kop_line_weight" id="kop_line_weight">
+                                    <option value="thin">Tipis (1.5 px)</option>
+                                    <option value="normal" selected>Standar (3 px)</option>
+                                    <option value="thick">Tebal Tegas (4.5 px)</option>
                                 </select>
                             </div>
                         </div>
@@ -461,14 +621,41 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         </div>
 
                         <div class="builder-field full">
-                            <label>Tujuan / Penerima Surat (Kepada Yth.) <b>*</b></label>
+                            <div class="field-header-flex">
+                                <label>Tujuan / Penerima Surat (Kepada Yth.) <b>*</b></label>
+                                <div class="size-pill-group">
+                                    <span>Font:</span>
+                                    <select name="recipient_size" id="recipient_size" class="size-select-sm">
+                                        <option value="9.5pt">9.5 pt</option>
+                                        <option value="10pt">10 pt</option>
+                                        <option value="10.5pt">10.5 pt</option>
+                                        <option value="11pt" selected>11 pt (Standar)</option>
+                                        <option value="11.5pt">11.5 pt</option>
+                                        <option value="12pt">12 pt</option>
+                                        <option value="13pt">13 pt</option>
+                                    </select>
+                                </div>
+                            </div>
                             <textarea name="recipient" id="recipient" rows="3" required placeholder="Contoh:&#10;Yth. Dekan Fakultas Teknik&#10;Universitas Muhammadiyah Ponorogo&#10;di Tempat">Yth. Seluruh Pejabat Struktural dan Tim Teknis LPSI
 Universitas Muhammadiyah Ponorogo
 di Tempat</textarea>
                         </div>
 
                         <div class="builder-field full">
-                            <label>Salam Pembuka (Greeting Opening)</label>
+                            <div class="field-header-flex">
+                                <label>Salam Pembuka (Greeting Opening)</label>
+                                <div class="size-pill-group">
+                                    <span>Font:</span>
+                                    <select name="greeting_opening_size" id="greeting_opening_size" class="size-select-sm">
+                                        <option value="10pt">10 pt</option>
+                                        <option value="10.5pt">10.5 pt</option>
+                                        <option value="11pt">11 pt</option>
+                                        <option value="11.5pt" selected>11.5 pt (Standar)</option>
+                                        <option value="12pt">12 pt</option>
+                                        <option value="13pt">13 pt</option>
+                                    </select>
+                                </div>
+                            </div>
                             <div class="pill-selector" style="margin-bottom:8px;">
                                 <button type="button" class="pill-opt" onclick="window.setOpeningGreeting('Dengan hormat,'); return false;">Dengan hormat,</button>
                                 <button type="button" class="pill-opt" onclick="window.setOpeningGreeting('Assalamu\'alaikum Wr. Wb.,'); return false;">Assalamu'alaikum Wr. Wb.,</button>
@@ -479,7 +666,20 @@ di Tempat</textarea>
                         </div>
 
                         <div class="builder-field full">
-                            <label>Paragraf Pembuka / Dasar Penerbitan Surat</label>
+                            <div class="field-header-flex">
+                                <label>Paragraf Pembuka / Dasar Penerbitan Surat</label>
+                                <div class="size-pill-group">
+                                    <span>Font:</span>
+                                    <select name="opening_size" id="opening_size" class="size-select-sm">
+                                        <option value="10pt">10 pt</option>
+                                        <option value="10.5pt">10.5 pt</option>
+                                        <option value="11pt">11 pt</option>
+                                        <option value="11.5pt" selected>11.5 pt (Standar)</option>
+                                        <option value="12pt">12 pt</option>
+                                        <option value="13pt">13 pt</option>
+                                    </select>
+                                </div>
+                            </div>
                             <textarea name="opening" id="opening" rows="3" placeholder="Contoh: Dalam rangka pelaksanaan audit kepatuhan infrastruktur sistem informasi semester ganjil tahun akademik 2026/2027, bersama surat ini pimpinan menugaskan:">Dalam rangka mewujudkan tata kelola teknologi informasi yang andal, aman, dan akuntabel di lingkungan Universitas Muhammadiyah Ponorogo, dengan ini pimpinan menugaskan kepada tim yang tercantum untuk melaksanakan kegiatan audit dan evaluasi infrastruktur sistem informasi.</textarea>
                         </div>
                     </section>
@@ -488,13 +688,50 @@ di Tempat</textarea>
                         <div class="builder-card-title">
                             <span class="section-icon blue"><i class="ri-file-list-3-line"></i></span>
                             <div>
-                                <h3>Pokok Isi Surat & Penutup</h3>
-                                <p>Rincian isi surat, poin instruksi/kegiatan, dan kalimat penutup.</p>
+                                <h3>Pokok Isi Surat, Spasi & Penutup</h3>
+                                <p>Rincian isi surat, ukuran teks, jarak spasi baris (line height), dan penutup.</p>
+                            </div>
+                        </div>
+
+                        <div class="builder-grid-2" style="margin-bottom:12px;">
+                            <div class="builder-field">
+                                <label>Ukuran Font Isi Pokok Surat</label>
+                                <select name="body_size" id="body_size">
+                                    <option value="9.5pt">9.5 pt</option>
+                                    <option value="10pt">10 pt</option>
+                                    <option value="10.5pt">10.5 pt</option>
+                                    <option value="11pt">11 pt</option>
+                                    <option value="11.5pt" selected>11.5 pt (Standar Dinas)</option>
+                                    <option value="12pt">12 pt</option>
+                                    <option value="13pt">13 pt</option>
+                                    <option value="14pt">14 pt</option>
+                                </select>
+                            </div>
+
+                            <div class="builder-field">
+                                <label>Jarak Spasi Baris (Line Height)</label>
+                                <select name="body_line_height" id="body_line_height">
+                                    <option value="1.2">Sangat Rapat (1.2)</option>
+                                    <option value="1.4">Rapat (1.4)</option>
+                                    <option value="1.6" selected>Standar Dinas (1.6 ~ 1.5 spasi)</option>
+                                    <option value="1.8">Longgar (1.8)</option>
+                                    <option value="2.0">Ganda (2.0)</option>
+                                </select>
                             </div>
                         </div>
 
                         <div class="builder-field full">
-                            <label>Isi Dokumen / Rincian Penugasan <b>*</b></label>
+                            <div class="field-header-flex">
+                                <label>Isi Dokumen / Rincian Penugasan <b>*</b></label>
+                                <div class="size-pill-group">
+                                    <span>Spasi Paragraf:</span>
+                                    <select name="paragraph_spacing" id="paragraph_spacing" class="size-select-sm">
+                                        <option value="compact">Rapat (6px)</option>
+                                        <option value="normal" selected>Normal (10px)</option>
+                                        <option value="relaxed">Longgar (16px)</option>
+                                    </select>
+                                </div>
+                            </div>
                             <textarea name="body" id="body" rows="8" required placeholder="Tuliskan isi surat lengkap di sini...">Adapun ketentuan dan ruang lingkup pelaksanaan adalah sebagai berikut:
 1. Melakukan pemeriksaan menyeluruh terhadap server database, jaringan internal, dan sistem cadangan data (backup recovery).
 2. Mengidentifikasi kerentanan sistem dan menyusun rekomendasi mitigasi risiko keamanan siber.
@@ -502,12 +739,38 @@ di Tempat</textarea>
                         </div>
 
                         <div class="builder-field full">
-                            <label>Paragraf Penutup (Closing Statement)</label>
+                            <div class="field-header-flex">
+                                <label>Paragraf Penutup (Closing Statement)</label>
+                                <div class="size-pill-group">
+                                    <span>Font:</span>
+                                    <select name="closing_size" id="closing_size" class="size-select-sm">
+                                        <option value="10pt">10 pt</option>
+                                        <option value="10.5pt">10.5 pt</option>
+                                        <option value="11pt">11 pt</option>
+                                        <option value="11.5pt" selected>11.5 pt (Standar)</option>
+                                        <option value="12pt">12 pt</option>
+                                        <option value="13pt">13 pt</option>
+                                    </select>
+                                </div>
+                            </div>
                             <textarea name="closing" id="closing" rows="2" placeholder="Contoh: Demikian surat tugas ini dibuat untuk dilaksanakan dengan sebaik-baiknya dan penuh tanggung jawab.">Demikian surat tugas ini diterbitkan untuk dilaksanakan dengan penuh rasa tanggung jawab dan dedikasi.</textarea>
                         </div>
 
                         <div class="builder-field full">
-                            <label>Salam Penutup</label>
+                            <div class="field-header-flex">
+                                <label>Salam Penutup</label>
+                                <div class="size-pill-group">
+                                    <span>Font:</span>
+                                    <select name="greeting_closing_size" id="greeting_closing_size" class="size-select-sm">
+                                        <option value="10pt">10 pt</option>
+                                        <option value="10.5pt">10.5 pt</option>
+                                        <option value="11pt">11 pt</option>
+                                        <option value="11.5pt" selected>11.5 pt (Standar)</option>
+                                        <option value="12pt">12 pt</option>
+                                        <option value="13pt">13 pt</option>
+                                    </select>
+                                </div>
+                            </div>
                             <div class="pill-selector" style="margin-bottom:8px;">
                                 <button type="button" class="pill-opt" onclick="window.setClosingGreeting('Hormat kami,'); return false;">Hormat kami,</button>
                                 <button type="button" class="pill-opt" onclick="window.setClosingGreeting('Wassalamu\'alaikum Wr. Wb.'); return false;">Wassalamu'alaikum Wr. Wb.</button>
@@ -524,8 +787,8 @@ di Tempat</textarea>
                         <div class="builder-card-title">
                             <span class="section-icon violet"><i class="ri-quill-pen-line"></i></span>
                             <div>
-                                <h3>Pejabat & Tanda Tangan</h3>
-                                <p>Identitas penandatangan, tanda tangan digital, atau stempel basah.</p>
+                                <h3>Pejabat & Ruang Tanda Tangan</h3>
+                                <p>Identitas penandatangan, ukuran font, tinggi ruang tanda tangan & gambar scan.</p>
                             </div>
                         </div>
 
@@ -546,18 +809,80 @@ di Tempat</textarea>
                             </div>
 
                             <div class="builder-field">
-                                <label>Jabatan Penandatangan <b>*</b></label>
+                                <div class="field-header-flex">
+                                    <label>Jabatan Penandatangan <b>*</b></label>
+                                    <div class="size-pill-group">
+                                        <span>Font:</span>
+                                        <select name="signer_position_size" id="signer_position_size" class="size-select-sm">
+                                            <option value="10pt">10 pt</option>
+                                            <option value="10.5pt">10.5 pt</option>
+                                            <option value="11pt">11 pt</option>
+                                            <option value="11.5pt" selected>11.5 pt (Standar)</option>
+                                            <option value="12pt">12 pt</option>
+                                            <option value="13pt">13 pt</option>
+                                        </select>
+                                    </div>
+                                </div>
                                 <input type="text" name="signer_position" id="signer_position" value="Kepala LPSI" required>
                             </div>
 
                             <div class="builder-field">
-                                <label>Nama Lengkap Pejabat <b>*</b></label>
+                                <div class="field-header-flex">
+                                    <label>Nama Lengkap Pejabat <b>*</b></label>
+                                    <div class="size-pill-group">
+                                        <span>Font:</span>
+                                        <select name="signer_name_size" id="signer_name_size" class="size-select-sm">
+                                            <option value="10.5pt">10.5 pt</option>
+                                            <option value="11pt">11 pt</option>
+                                            <option value="11.5pt">11.5 pt</option>
+                                            <option value="12pt" selected>12 pt (Standar)</option>
+                                            <option value="13pt">13 pt</option>
+                                            <option value="14pt">14 pt</option>
+                                        </select>
+                                    </div>
+                                </div>
                                 <input type="text" name="signer_name" id="signer_name" value="<?= e($defaultSignerName) ?>" required>
                             </div>
 
                             <div class="builder-field full">
-                                <label>NIP / NIDN / NBM Pejabat</label>
+                                <div class="field-header-flex">
+                                    <label>NIP / NIDN / NBM Pejabat</label>
+                                    <div class="size-pill-group">
+                                        <span>Font:</span>
+                                        <select name="signer_number_size" id="signer_number_size" class="size-select-sm">
+                                            <option value="8.5pt">8.5 pt</option>
+                                            <option value="9pt">9 pt</option>
+                                            <option value="9.5pt">9.5 pt</option>
+                                            <option value="10pt" selected>10 pt (Standar)</option>
+                                            <option value="10.5pt">10.5 pt</option>
+                                            <option value="11pt">11 pt</option>
+                                        </select>
+                                    </div>
+                                </div>
                                 <input type="text" name="signer_number" id="signer_number" value="NIDN. 0712058801">
+                            </div>
+                        </div>
+
+                        <div class="builder-grid-2" style="margin-top:8px;">
+                            <div class="builder-field">
+                                <label>Tinggi Ruang Tanda Tangan</label>
+                                <select name="signature_space_height" id="signature_space_height">
+                                    <option value="45px">Kecil / Ringkas (45 px)</option>
+                                    <option value="65px">Sedang (65 px)</option>
+                                    <option value="80px" selected>Standar Resmi (80 px)</option>
+                                    <option value="100px">Tinggi (100 px)</option>
+                                    <option value="120px">Ekstra Tinggi (120 px)</option>
+                                </select>
+                            </div>
+
+                            <div class="builder-field">
+                                <label>Ukuran Gambar Tanda Tangan</label>
+                                <select name="signature_size" id="signature_size">
+                                    <option value="small">Kecil (50 px)</option>
+                                    <option value="medium" selected>Sedang (70 px)</option>
+                                    <option value="large">Besar (90 px)</option>
+                                    <option value="xlarge">Ekstra Besar (110 px)</option>
+                                </select>
                             </div>
                         </div>
 
@@ -587,10 +912,11 @@ di Tempat</textarea>
                             <span class="section-icon rose"><i class="ri-copper-coin-line"></i></span>
                             <div>
                                 <h3>Cap / Stempel Resmi Dinas</h3>
-                                <p>Atur stempel dinas agar bertumpuk realistis dengan tanda tangan.</p>
+                                <p>Atur ukuran stempel dinas, opasitas tinta basah, dan penempatan tumpang tindih.</p>
                             </div>
                         </div>
 
+                        <!-- Upload Cap -->
                         <div class="builder-field full">
                             <label>Gambar Cap / Stempel (PNG Transparan)</label>
                             <div class="builder-upload-box">
@@ -609,22 +935,32 @@ di Tempat</textarea>
                             </div>
                         </div>
 
-                        <div class="builder-grid-2">
+                        <div class="builder-grid-3">
                             <div class="builder-field">
-                                <label>Posisi Stempel terhadap TTD</label>
+                                <label>Posisi Stempel</label>
                                 <select name="stamp_position" id="stamp_position">
-                                    <option value="left" selected>Sebelah Kiri Menimpa TTD (Standar Resmi)</option>
+                                    <option value="left" selected>Kiri Menimpa TTD</option>
                                     <option value="center">Tengah Tepat di TTD</option>
-                                    <option value="right">Sebelah Kanan TTD</option>
+                                    <option value="right">Kanan TTD</option>
                                 </select>
                             </div>
 
                             <div class="builder-field">
-                                <label>Tingkat Ketebalan (Opasitas Stempel)</label>
+                                <label>Ukuran Diameter Cap</label>
+                                <select name="stamp_size" id="stamp_size">
+                                    <option value="small">Kecil (65 px)</option>
+                                    <option value="medium" selected>Sedang (85 px)</option>
+                                    <option value="large">Besar (105 px)</option>
+                                    <option value="xlarge">Ekstra Besar (125 px)</option>
+                                </select>
+                            </div>
+
+                            <div class="builder-field">
+                                <label>Opasitas (Ketebalan Tinta)</label>
                                 <select name="stamp_opacity" id="stamp_opacity">
                                     <option value="100">100% (Pekat)</option>
-                                    <option value="85" selected>85% (Realistis Tinta Basah)</option>
-                                    <option value="70">70% (Transparan Halus)</option>
+                                    <option value="85" selected>85% (Tinta Basah)</option>
+                                    <option value="70">70% (Halus)</option>
                                 </select>
                             </div>
                         </div>
@@ -636,19 +972,45 @@ di Tempat</textarea>
                             <span class="section-icon teal"><i class="ri-file-copy-line"></i></span>
                             <div>
                                 <h3>Tembusan & Catatan Kaki (Footer)</h3>
-                                <p>Daftar tembusan surat dan catatan integritas dokumen.</p>
+                                <p>Daftar tembusan surat, ukuran font, dan catatan kaki dokumen.</p>
                             </div>
                         </div>
 
                         <div class="builder-field full">
-                            <label>Tembusan Surat (Satu baris per penerima)</label>
+                            <div class="field-header-flex">
+                                <label>Tembusan Surat (Satu baris per penerima)</label>
+                                <div class="size-pill-group">
+                                    <span>Font:</span>
+                                    <select name="copies_size" id="copies_size" class="size-select-sm">
+                                        <option value="8.5pt">8.5 pt</option>
+                                        <option value="9pt">9 pt</option>
+                                        <option value="9.5pt">9.5 pt</option>
+                                        <option value="10pt" selected>10 pt (Standar)</option>
+                                        <option value="10.5pt">10.5 pt</option>
+                                        <option value="11pt">11 pt</option>
+                                    </select>
+                                </div>
+                            </div>
                             <textarea name="copies" id="copies" rows="4" placeholder="Contoh:&#10;1. Rektor Universitas Muhammadiyah Ponorogo&#10;2. Wakil Rektor II Bidang Administrasi dan Keuangan&#10;3. Arsip">1. Rektor Universitas Muhammadiyah Ponorogo (sebagai laporan)
 2. Wakil Rektor Terkait
 3. Arsip LPSI</textarea>
                         </div>
 
                         <div class="builder-field full">
-                            <label>Catatan Kaki Dokumen (Footer Note)</label>
+                            <div class="field-header-flex">
+                                <label>Catatan Kaki Dokumen (Footer Note)</label>
+                                <div class="size-pill-group">
+                                    <span>Font:</span>
+                                    <select name="footer_size" id="footer_size" class="size-select-sm">
+                                        <option value="7.5pt">7.5 pt</option>
+                                        <option value="8pt">8 pt</option>
+                                        <option value="8.5pt" selected>8.5 pt (Standar)</option>
+                                        <option value="9pt">9 pt</option>
+                                        <option value="9.5pt">9.5 pt</option>
+                                        <option value="10pt">10 pt</option>
+                                    </select>
+                                </div>
+                            </div>
                             <input type="text" name="footer_note" id="footer_note" value="Dokumen resmi diterbitkan melalui SIMANTAP · Universitas Muhammadiyah Ponorogo" placeholder="Contoh: Dokumen ini telah diverifikasi elektronik melalui SIMANTAP">
                         </div>
                     </section>
@@ -657,7 +1019,7 @@ di Tempat</textarea>
                 <!-- Tombol Navigasi Wizard & Simpan -->
                 <div class="builder-actions-bar">
                     <a class="secondary-button" href="?page=documents"><i class="ri-close-line"></i>Batal</a>
-                    <div style="display:flex;gap:8px;">
+                    <div style="display:flex;gap:8px;align-items:center;">
                         <button type="button" class="secondary-button" id="prevTabBtn" style="display:none;" onclick="window.switchBuilderTab((window.currentBuilderTabIdx||0)-1); return false;"><i class="ri-arrow-left-line"></i>Kembali</button>
                         <button type="button" class="secondary-button" id="nextTabBtn" onclick="window.switchBuilderTab((window.currentBuilderTabIdx||0)+1); return false;">Lanjut ke KOP & Logo <i class="ri-arrow-right-line"></i></button>
                         <button class="primary-button" type="submit" id="submitDraftBtn"><i class="ri-save-3-line"></i>Simpan Draf Surat</button>

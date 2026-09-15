@@ -3,12 +3,45 @@ declare(strict_types=1);
 
 $releases = [
     [
-        'version' => '1.2.0',
-        'type' => 'minor',
+        'version' => '1.2.1',
+        'type' => 'patch',
         'is_latest' => true,
         'date' => '15 September 2026',
         'badge' => 'Rilis Terbaru',
         'badge_theme' => 'emerald',
+        'title' => 'Kustomisasi Ukuran Seluruh Elemen Surat & Sistem Auto-Save Lokal Anti-Lag',
+        'description' => 'Penambahan fitur kontrol ukuran font, margin, jarak spasi baris, dan dimensi untuk seluruh komponen naskah dinas, serta sistem Auto-Save lokal cerdas tanpa membebani server.',
+        'items' => [
+            [
+                'type' => 'added',
+                'label' => 'FITUR BARU',
+                'icon' => 'ri-font-size-2',
+                'theme' => 'blue',
+                'text' => '<strong>Kustomisasi Penuh Ukuran Semua Elemen:</strong> Penyesuaian ukuran font untuk KOP (3 tingkatan), metadata dokumen, tanggal, penerima (Yth.), salam pembuka/penutup, isi paragraf, jabatan & nama penandatangan, NIP, tembusan, dan catatan kaki.'
+            ],
+            [
+                'type' => 'added',
+                'label' => 'FITUR BARU',
+                'icon' => 'ri-line-height',
+                'theme' => 'blue',
+                'text' => '<strong>Kontrol Spasi, Margin & Dimensi A4:</strong> Pengaturan margin kertas A4 (Compact, Normal, Spacious), jarak baris (Line Height 1.2 - 2.0), spasi paragraf, tinggi ruang tanda tangan (45-120px), dimensi logo, serta diameter dan opasitas stempel dinas.'
+            ],
+            [
+                'type' => 'added',
+                'label' => 'FITUR BARU',
+                'icon' => 'ri-save-3-fill',
+                'theme' => 'emerald',
+                'text' => '<strong>Auto-Save Lokal Tanpa Beban Server:</strong> Penyimpanan draf otomatis di background menggunakan <code>localStorage</code> peramban dengan debounce 280ms (0 HTTP overhead). Dilengkapi banner pemulihan draf otomatis (Draft Recovery) dan indikator status.'
+            ],
+        ]
+    ],
+    [
+        'version' => '1.2.0',
+        'type' => 'minor',
+        'is_latest' => false,
+        'date' => '15 September 2026',
+        'badge' => 'Peningkatan UI',
+        'badge_theme' => 'blue',
         'title' => 'Panel Notifikasi Geser Sisi Kanan & Sinkronisasi Badge Real-Time',
         'description' => 'Peningkatan interaktivitas notifikasi dengan model off-canvas drawer dari sisi kanan layar, sinkronisasi data riil pada badge navigasi sidebar, dan peluncuran portal Changelog & Versioning terpadu.',
         'items' => [

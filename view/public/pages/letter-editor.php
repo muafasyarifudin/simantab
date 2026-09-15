@@ -21,30 +21,56 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $v['address'] = trim((string)($_POST['address'] ?? $v['address']));
         $v['contact'] = trim((string)($_POST['contact'] ?? $v['contact']));
         $v['heading'] = trim((string)($_POST['heading'] ?? $v['heading']));
-        $v['kop_align'] = $_POST['kop_align'] ?? 'center';
-        $v['kop_line_style'] = $_POST['kop_line_style'] ?? 'double';
-        $v['logo_align'] = $_POST['logo_align'] ?? 'left';
-        $v['logo_size'] = $_POST['logo_size'] ?? 'medium';
-        $v['font_family'] = $_POST['font_family'] ?? 'serif';
+        $v['heading_size'] = $_POST['heading_size'] ?? ($v['heading_size'] ?? '14pt');
+        $v['kop_align'] = $_POST['kop_align'] ?? ($v['kop_align'] ?? 'center');
+        $v['kop_line_style'] = $_POST['kop_line_style'] ?? ($v['kop_line_style'] ?? 'double');
+        $v['kop_line_weight'] = $_POST['kop_line_weight'] ?? ($v['kop_line_weight'] ?? 'normal');
+        $v['kop_spacing'] = $_POST['kop_spacing'] ?? ($v['kop_spacing'] ?? 'normal');
+        $v['kop_inst1_size'] = $_POST['kop_inst1_size'] ?? ($v['kop_inst1_size'] ?? '14pt');
+        $v['kop_inst2_size'] = $_POST['kop_inst2_size'] ?? ($v['kop_inst2_size'] ?? '12pt');
+        $v['kop_address_size'] = $_POST['kop_address_size'] ?? ($v['kop_address_size'] ?? '9pt');
+        $v['kop_contact_size'] = $_POST['kop_contact_size'] ?? ($v['kop_contact_size'] ?? '8.5pt');
+        $v['logo_align'] = $_POST['logo_align'] ?? ($v['logo_align'] ?? 'left');
+        $v['logo_size'] = $_POST['logo_size'] ?? ($v['logo_size'] ?? 'medium');
+        $v['font_family'] = $_POST['font_family'] ?? ($v['font_family'] ?? 'serif');
+        $v['paper_margin'] = $_POST['paper_margin'] ?? ($v['paper_margin'] ?? 'normal');
         $v['custom_number'] = trim((string)($_POST['custom_number'] ?? ''));
-        $v['confidentiality'] = $_POST['confidentiality'] ?? 'Biasa';
-        $v['attachment'] = trim((string)($_POST['attachment'] ?? '-'));
+        $v['confidentiality'] = $_POST['confidentiality'] ?? ($v['confidentiality'] ?? 'Biasa');
+        $v['attachment'] = trim((string)($_POST['attachment'] ?? ($v['attachment'] ?? '-')));
         $v['title'] = trim((string)($_POST['title'] ?? $d['title']));
+        $v['meta_font_size'] = $_POST['meta_font_size'] ?? ($v['meta_font_size'] ?? '11pt');
+        $v['date_size'] = $_POST['date_size'] ?? ($v['date_size'] ?? '11pt');
         $v['recipient'] = trim((string)($_POST['recipient'] ?? ''));
-        $v['greeting_opening'] = trim((string)($_POST['greeting_opening'] ?? 'Dengan hormat,'));
+        $v['recipient_size'] = $_POST['recipient_size'] ?? ($v['recipient_size'] ?? '11pt');
+        $v['greeting_opening'] = trim((string)($_POST['greeting_opening'] ?? ($v['greeting_opening'] ?? 'Dengan hormat,')));
+        $v['greeting_opening_size'] = $_POST['greeting_opening_size'] ?? ($v['greeting_opening_size'] ?? '11.5pt');
         $v['opening'] = trim((string)($_POST['opening'] ?? ''));
+        $v['opening_size'] = $_POST['opening_size'] ?? ($v['opening_size'] ?? '11.5pt');
         $v['body'] = trim((string)($_POST['body'] ?? ''));
+        $v['body_size'] = $_POST['body_size'] ?? ($v['body_size'] ?? '11.5pt');
+        $v['body_line_height'] = $_POST['body_line_height'] ?? ($v['body_line_height'] ?? '1.6');
+        $v['paragraph_spacing'] = $_POST['paragraph_spacing'] ?? ($v['paragraph_spacing'] ?? 'normal');
         $v['closing'] = trim((string)($_POST['closing'] ?? ''));
-        $v['greeting_closing'] = trim((string)($_POST['greeting_closing'] ?? 'Hormat kami,'));
+        $v['closing_size'] = $_POST['closing_size'] ?? ($v['closing_size'] ?? '11.5pt');
+        $v['greeting_closing'] = trim((string)($_POST['greeting_closing'] ?? ($v['greeting_closing'] ?? 'Hormat kami,')));
+        $v['greeting_closing_size'] = $_POST['greeting_closing_size'] ?? ($v['greeting_closing_size'] ?? '11.5pt');
         $v['city'] = trim((string)($_POST['city'] ?? ''));
         $v['date'] = $_POST['document_date'] ?? date('Y-m-d');
         $v['signer_position'] = trim((string)($_POST['signer_position'] ?? ''));
+        $v['signer_position_size'] = $_POST['signer_position_size'] ?? ($v['signer_position_size'] ?? '11.5pt');
         $v['signer_name'] = trim((string)($_POST['signer_name'] ?? ''));
+        $v['signer_name_size'] = $_POST['signer_name_size'] ?? ($v['signer_name_size'] ?? '12pt');
         $v['signer_number'] = trim((string)($_POST['signer_number'] ?? ''));
-        $v['stamp_position'] = $_POST['stamp_position'] ?? 'left';
-        $v['stamp_opacity'] = $_POST['stamp_opacity'] ?? '85';
+        $v['signer_number_size'] = $_POST['signer_number_size'] ?? ($v['signer_number_size'] ?? '10pt');
+        $v['signature_size'] = $_POST['signature_size'] ?? ($v['signature_size'] ?? 'medium');
+        $v['signature_space_height'] = $_POST['signature_space_height'] ?? ($v['signature_space_height'] ?? '80px');
+        $v['stamp_position'] = $_POST['stamp_position'] ?? ($v['stamp_position'] ?? 'left');
+        $v['stamp_size'] = $_POST['stamp_size'] ?? ($v['stamp_size'] ?? 'medium');
+        $v['stamp_opacity'] = $_POST['stamp_opacity'] ?? ($v['stamp_opacity'] ?? '85');
         $v['copies'] = trim((string)($_POST['copies'] ?? ''));
+        $v['copies_size'] = $_POST['copies_size'] ?? ($v['copies_size'] ?? '10pt');
         $v['footer_note'] = trim((string)($_POST['footer_note'] ?? ''));
+        $v['footer_size'] = $_POST['footer_size'] ?? ($v['footer_size'] ?? '8.5pt');
 
         // Handle base64 from client or fallback files
         if (!empty($_POST['logo_base64'])) $v['logo'] = LetterService::saveBase64Image($_POST['logo_base64'], 'logo');
@@ -95,11 +121,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <h1>Sesuaikan Format Surat<span>.</span></h1>
             <p>Ubah KOP, Logo, Garis Dinas, Identitas Surat, Konten, Tanda Tangan & Cap stempel untuk dokumen #<?= $id ?>.</p>
         </div>
-        <div style="display:flex;gap:10px;align-items:center;">
+        <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;">
+            <!-- Auto Save Status Badge -->
+            <div id="autoSaveStatus" class="autosave-badge saved">
+                <i class="ri-check-double-line"></i>
+                <span id="autoSaveText">Draf tersimpan otomatis</span>
+                <small id="autoSaveTime" style="opacity:0.8;font-size:10.5px;"></small>
+            </div>
+
             <div class="builder-view-toggle">
-                <button type="button" class="active" data-view-mode="split"><i class="ri-layout-column-line"></i>Split</button>
-                <button type="button" data-view-mode="form"><i class="ri-edit-box-line"></i>Form</button>
-                <button type="button" data-view-mode="preview"><i class="ri-file-paper-line"></i>A4</button>
+                <button type="button" class="active" data-view-mode="split" onclick="window.setWorkViewMode('split'); return false;"><i class="ri-layout-column-line"></i>Split Workbench</button>
+                <button type="button" data-view-mode="form" onclick="window.setWorkViewMode('form'); return false;"><i class="ri-edit-box-line"></i>Form Saja</button>
+                <button type="button" data-view-mode="preview" onclick="window.setWorkViewMode('preview'); return false;"><i class="ri-file-paper-line"></i>Kertas A4</button>
             </div>
             <a class="secondary-button" href="?page=document-detail&id=<?= $id ?>"><i class="ri-eye-line"></i>Lihat Detail</a>
         </div>
@@ -129,13 +162,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 </div>
 
                 <!-- TAB 1: IDENTITAS & NOMOR SURAT -->
-                <div class="builder-tab-pane active" id="tab-meta">
+                <div class="builder-tab-pane active" id="tab-meta" style="display: block;">
                     <section class="builder-card">
                         <div class="builder-card-title">
                             <span class="section-icon blue"><i class="ri-file-settings-line"></i></span>
                             <div>
                                 <h3>Identitas & Nomor Dokumen</h3>
-                                <p>Perbarui perihal, nomor resmi, dan sifat dokumen.</p>
+                                <p>Perbarui perihal, nomor resmi, sifat dokumen, dan ukuran font metadata.</p>
                             </div>
                         </div>
 
@@ -146,7 +179,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             </div>
 
                             <div class="builder-field">
-                                <label>Judul Kategori / Heading Kertas</label>
+                                <div class="field-header-flex">
+                                    <label>Judul Kategori / Heading Kertas</label>
+                                    <div class="size-pill-group">
+                                        <span>Font:</span>
+                                        <select name="heading_size" id="heading_size" class="size-select-sm">
+                                            <option value="12pt" <?= ($v['heading_size'] ?? '') === '12pt' ? 'selected' : '' ?>>12 pt</option>
+                                            <option value="13pt" <?= ($v['heading_size'] ?? '') === '13pt' ? 'selected' : '' ?>>13 pt</option>
+                                            <option value="14pt" <?= ($v['heading_size'] ?? '14pt') === '14pt' ? 'selected' : '' ?>>14 pt (Standar)</option>
+                                            <option value="15pt" <?= ($v['heading_size'] ?? '') === '15pt' ? 'selected' : '' ?>>15 pt</option>
+                                            <option value="16pt" <?= ($v['heading_size'] ?? '') === '16pt' ? 'selected' : '' ?>>16 pt</option>
+                                            <option value="18pt" <?= ($v['heading_size'] ?? '') === '18pt' ? 'selected' : '' ?>>18 pt</option>
+                                        </select>
+                                    </div>
+                                </div>
                                 <input type="text" name="heading" id="heading" value="<?= e($v['heading'] ?: strtoupper($d['type_name'])) ?>">
                             </div>
 
@@ -166,12 +212,37 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             </div>
 
                             <div class="builder-field">
-                                <label>Lampiran</label>
+                                <div class="field-header-flex">
+                                    <label>Lampiran</label>
+                                    <div class="size-pill-group">
+                                        <span>Font:</span>
+                                        <select name="meta_font_size" id="meta_font_size" class="size-select-sm">
+                                            <option value="9.5pt" <?= ($v['meta_font_size'] ?? '') === '9.5pt' ? 'selected' : '' ?>>9.5 pt</option>
+                                            <option value="10pt" <?= ($v['meta_font_size'] ?? '') === '10pt' ? 'selected' : '' ?>>10 pt</option>
+                                            <option value="10.5pt" <?= ($v['meta_font_size'] ?? '') === '10.5pt' ? 'selected' : '' ?>>10.5 pt</option>
+                                            <option value="11pt" <?= ($v['meta_font_size'] ?? '11pt') === '11pt' ? 'selected' : '' ?>>11 pt (Standar)</option>
+                                            <option value="11.5pt" <?= ($v['meta_font_size'] ?? '') === '11.5pt' ? 'selected' : '' ?>>11.5 pt</option>
+                                            <option value="12pt" <?= ($v['meta_font_size'] ?? '') === '12pt' ? 'selected' : '' ?>>12 pt</option>
+                                        </select>
+                                    </div>
+                                </div>
                                 <input type="text" name="attachment" id="attachment" value="<?= e($v['attachment'] ?? '-') ?>">
                             </div>
 
                             <div class="builder-field">
-                                <label>Tanggal Surat</label>
+                                <div class="field-header-flex">
+                                    <label>Tanggal Surat</label>
+                                    <div class="size-pill-group">
+                                        <span>Font:</span>
+                                        <select name="date_size" id="date_size" class="size-select-sm">
+                                            <option value="9.5pt" <?= ($v['date_size'] ?? '') === '9.5pt' ? 'selected' : '' ?>>9.5 pt</option>
+                                            <option value="10pt" <?= ($v['date_size'] ?? '') === '10pt' ? 'selected' : '' ?>>10 pt</option>
+                                            <option value="10.5pt" <?= ($v['date_size'] ?? '') === '10.5pt' ? 'selected' : '' ?>>10.5 pt</option>
+                                            <option value="11pt" <?= ($v['date_size'] ?? '11pt') === '11pt' ? 'selected' : '' ?>>11 pt</option>
+                                            <option value="12pt" <?= ($v['date_size'] ?? '') === '12pt' ? 'selected' : '' ?>>12 pt</option>
+                                        </select>
+                                    </div>
+                                </div>
                                 <input type="date" name="document_date" id="document_date" value="<?= e($v['date'] ?? date('Y-m-d')) ?>">
                             </div>
                         </div>
@@ -179,63 +250,114 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 </div>
 
                 <!-- TAB 2: KOP, LOGO & GARIS PEMBATAS -->
-                <div class="builder-tab-pane" id="tab-kop">
+                <div class="builder-tab-pane" id="tab-kop" style="display: none;">
                     <section class="builder-card">
                         <div class="builder-card-title">
                             <span class="section-icon blue"><i class="ri-layout-top-line"></i></span>
                             <div>
                                 <h3>Kepala Surat (KOP) & Tipografi</h3>
-                                <p>Sesuaikan nama instansi, alamat, dan font surat.</p>
+                                <p>Sesuaikan nama instansi, alamat, ukuran teks, dan font surat.</p>
                             </div>
                         </div>
 
                         <div class="builder-field full">
-                            <label>Nama Lembaga Induk / Instansi Atas (Baris 1) <b>*</b></label>
+                            <div class="field-header-flex">
+                                <label>Nama Lembaga Induk / Instansi Atas (Baris 1) <b>*</b></label>
+                                <div class="size-pill-group">
+                                    <span>Font:</span>
+                                    <select name="kop_inst1_size" id="kop_inst1_size" class="size-select-sm">
+                                        <option value="11pt" <?= ($v['kop_inst1_size'] ?? '') === '11pt' ? 'selected' : '' ?>>11 pt</option>
+                                        <option value="12pt" <?= ($v['kop_inst1_size'] ?? '') === '12pt' ? 'selected' : '' ?>>12 pt</option>
+                                        <option value="13pt" <?= ($v['kop_inst1_size'] ?? '') === '13pt' ? 'selected' : '' ?>>13 pt</option>
+                                        <option value="14pt" <?= ($v['kop_inst1_size'] ?? '14pt') === '14pt' ? 'selected' : '' ?>>14 pt (Standar)</option>
+                                        <option value="15pt" <?= ($v['kop_inst1_size'] ?? '') === '15pt' ? 'selected' : '' ?>>15 pt</option>
+                                        <option value="16pt" <?= ($v['kop_inst1_size'] ?? '') === '16pt' ? 'selected' : '' ?>>16 pt</option>
+                                        <option value="18pt" <?= ($v['kop_inst1_size'] ?? '') === '18pt' ? 'selected' : '' ?>>18 pt</option>
+                                        <option value="20pt" <?= ($v['kop_inst1_size'] ?? '') === '20pt' ? 'selected' : '' ?>>20 pt</option>
+                                    </select>
+                                </div>
+                            </div>
                             <input type="text" name="institution" id="kop_inst1" value="<?= e($v['institution']) ?>" required>
                         </div>
 
                         <div class="builder-field full">
-                            <label>Nama Satuan Kerja / Unit / Fakultas (Baris 2)</label>
+                            <div class="field-header-flex">
+                                <label>Nama Satuan Kerja / Unit / Fakultas (Baris 2)</label>
+                                <div class="size-pill-group">
+                                    <span>Font:</span>
+                                    <select name="kop_inst2_size" id="kop_inst2_size" class="size-select-sm">
+                                        <option value="10pt" <?= ($v['kop_inst2_size'] ?? '') === '10pt' ? 'selected' : '' ?>>10 pt</option>
+                                        <option value="11pt" <?= ($v['kop_inst2_size'] ?? '') === '11pt' ? 'selected' : '' ?>>11 pt</option>
+                                        <option value="12pt" <?= ($v['kop_inst2_size'] ?? '12pt') === '12pt' ? 'selected' : '' ?>>12 pt (Standar)</option>
+                                        <option value="13pt" <?= ($v['kop_inst2_size'] ?? '') === '13pt' ? 'selected' : '' ?>>13 pt</option>
+                                        <option value="14pt" <?= ($v['kop_inst2_size'] ?? '') === '14pt' ? 'selected' : '' ?>>14 pt</option>
+                                        <option value="16pt" <?= ($v['kop_inst2_size'] ?? '') === '16pt' ? 'selected' : '' ?>>16 pt</option>
+                                    </select>
+                                </div>
+                            </div>
                             <input type="text" name="unit" id="kop_inst2" value="<?= e($v['unit']) ?>">
                         </div>
 
                         <div class="builder-field full">
-                            <label>Alamat Lengkap KOP <b>*</b></label>
+                            <div class="field-header-flex">
+                                <label>Alamat Lengkap KOP <b>*</b></label>
+                                <div class="size-pill-group">
+                                    <span>Font:</span>
+                                    <select name="kop_address_size" id="kop_address_size" class="size-select-sm">
+                                        <option value="7.5pt" <?= ($v['kop_address_size'] ?? '') === '7.5pt' ? 'selected' : '' ?>>7.5 pt</option>
+                                        <option value="8pt" <?= ($v['kop_address_size'] ?? '') === '8pt' ? 'selected' : '' ?>>8 pt</option>
+                                        <option value="8.5pt" <?= ($v['kop_address_size'] ?? '') === '8.5pt' ? 'selected' : '' ?>>8.5 pt</option>
+                                        <option value="9pt" <?= ($v['kop_address_size'] ?? '9pt') === '9pt' ? 'selected' : '' ?>>9 pt (Standar)</option>
+                                        <option value="9.5pt" <?= ($v['kop_address_size'] ?? '') === '9.5pt' ? 'selected' : '' ?>>9.5 pt</option>
+                                        <option value="10pt" <?= ($v['kop_address_size'] ?? '') === '10pt' ? 'selected' : '' ?>>10 pt</option>
+                                    </select>
+                                </div>
+                            </div>
                             <textarea name="address" id="kop_address" rows="2" required><?= e($v['address']) ?></textarea>
                         </div>
 
                         <div class="builder-field full">
-                            <label>Kontak KOP (Telepon, Email, Website)</label>
+                            <div class="field-header-flex">
+                                <label>Kontak KOP (Telepon, Email, Website)</label>
+                                <div class="size-pill-group">
+                                    <span>Font:</span>
+                                    <select name="kop_contact_size" id="kop_contact_size" class="size-select-sm">
+                                        <option value="7pt" <?= ($v['kop_contact_size'] ?? '') === '7pt' ? 'selected' : '' ?>>7 pt</option>
+                                        <option value="7.5pt" <?= ($v['kop_contact_size'] ?? '') === '7.5pt' ? 'selected' : '' ?>>7.5 pt</option>
+                                        <option value="8pt" <?= ($v['kop_contact_size'] ?? '') === '8pt' ? 'selected' : '' ?>>8 pt</option>
+                                        <option value="8.5pt" <?= ($v['kop_contact_size'] ?? '8.5pt') === '8.5pt' ? 'selected' : '' ?>>8.5 pt (Standar)</option>
+                                        <option value="9pt" <?= ($v['kop_contact_size'] ?? '') === '9pt' ? 'selected' : '' ?>>9 pt</option>
+                                        <option value="10pt" <?= ($v['kop_contact_size'] ?? '') === '10pt' ? 'selected' : '' ?>>10 pt</option>
+                                    </select>
+                                </div>
+                            </div>
                             <input type="text" name="contact" id="kop_contact" value="<?= e($v['contact']) ?>">
                         </div>
 
-                        <div class="builder-grid-2">
+                        <div class="builder-grid-3">
                             <div class="builder-field">
                                 <label>Perataan KOP</label>
-                                <div class="pill-selector">
-                                    <label class="pill-opt <?= ($v['kop_align'] ?? 'center') === 'center' ? 'selected' : '' ?>">
-                                        <input type="radio" name="kop_align" value="center" <?= ($v['kop_align'] ?? 'center') === 'center' ? 'checked' : '' ?>>
-                                        <span>Tengah</span>
-                                    </label>
-                                    <label class="pill-opt <?= ($v['kop_align'] ?? '') === 'left' ? 'selected' : '' ?>">
-                                        <input type="radio" name="kop_align" value="left" <?= ($v['kop_align'] ?? '') === 'left' ? 'checked' : '' ?>>
-                                        <span>Kiri</span>
-                                    </label>
-                                </div>
+                                <select name="kop_align" id="kop_align">
+                                    <option value="center" <?= ($v['kop_align'] ?? 'center') === 'center' ? 'selected' : '' ?>>Tengah (Standar)</option>
+                                    <option value="left" <?= ($v['kop_align'] ?? '') === 'left' ? 'selected' : '' ?>>Rata Kiri</option>
+                                </select>
                             </div>
 
                             <div class="builder-field">
                                 <label>Gaya Huruf</label>
-                                <div class="pill-selector">
-                                    <label class="pill-opt <?= ($v['font_family'] ?? 'serif') === 'serif' ? 'selected' : '' ?>">
-                                        <input type="radio" name="font_family" value="serif" <?= ($v['font_family'] ?? 'serif') === 'serif' ? 'checked' : '' ?>>
-                                        <span>Serif (Times)</span>
-                                    </label>
-                                    <label class="pill-opt <?= ($v['font_family'] ?? '') === 'sans' ? 'selected' : '' ?>">
-                                        <input type="radio" name="font_family" value="sans" <?= ($v['font_family'] ?? '') === 'sans' ? 'checked' : '' ?>>
-                                        <span>Sans-Serif</span>
-                                    </label>
-                                </div>
+                                <select name="font_family" id="font_family">
+                                    <option value="serif" <?= ($v['font_family'] ?? 'serif') === 'serif' ? 'selected' : '' ?>>Serif (Times Formal)</option>
+                                    <option value="sans" <?= ($v['font_family'] ?? '') === 'sans' ? 'selected' : '' ?>>Sans-Serif (Modern)</option>
+                                </select>
+                            </div>
+
+                            <div class="builder-field">
+                                <label>Margin Lembar Kertas A4</label>
+                                <select name="paper_margin" id="paper_margin">
+                                    <option value="compact" <?= ($v['paper_margin'] ?? '') === 'compact' ? 'selected' : '' ?>>Ringkas (1.8 cm)</option>
+                                    <option value="normal" <?= ($v['paper_margin'] ?? 'normal') === 'normal' ? 'selected' : '' ?>>Standar Dinas (2.5 cm)</option>
+                                    <option value="spacious" <?= ($v['paper_margin'] ?? '') === 'spacious' ? 'selected' : '' ?>>Lebar / Luas (3.2 cm)</option>
+                                </select>
                             </div>
                         </div>
                     </section>
@@ -281,11 +403,32 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                 </select>
                             </div>
                             <div class="builder-field">
-                                <label>Ukuran Logo</label>
+                                <label>Ukuran Dimensi Logo</label>
                                 <select name="logo_size" id="logo_size">
                                     <option value="small" <?= ($v['logo_size'] ?? '') === 'small' ? 'selected' : '' ?>>Kecil (56 px)</option>
                                     <option value="medium" <?= ($v['logo_size'] ?? 'medium') === 'medium' ? 'selected' : '' ?>>Sedang (72 px)</option>
                                     <option value="large" <?= ($v['logo_size'] ?? '') === 'large' ? 'selected' : '' ?>>Besar (88 px)</option>
+                                    <option value="xlarge" <?= ($v['logo_size'] ?? '') === 'xlarge' ? 'selected' : '' ?>>Ekstra Besar (104 px)</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="builder-grid-2" style="margin-top:6px;">
+                            <div class="builder-field">
+                                <label>Jarak Spasi KOP ke Garis</label>
+                                <select name="kop_spacing" id="kop_spacing">
+                                    <option value="compact" <?= ($v['kop_spacing'] ?? '') === 'compact' ? 'selected' : '' ?>>Rapat (2 mm)</option>
+                                    <option value="normal" <?= ($v['kop_spacing'] ?? 'normal') === 'normal' ? 'selected' : '' ?>>Normal (6 mm)</option>
+                                    <option value="spacious" <?= ($v['kop_spacing'] ?? '') === 'spacious' ? 'selected' : '' ?>>Longgar (12 mm)</option>
+                                </select>
+                            </div>
+
+                            <div class="builder-field">
+                                <label>Ketebalan Garis KOP</label>
+                                <select name="kop_line_weight" id="kop_line_weight">
+                                    <option value="thin" <?= ($v['kop_line_weight'] ?? '') === 'thin' ? 'selected' : '' ?>>Tipis (1.5 px)</option>
+                                    <option value="normal" <?= ($v['kop_line_weight'] ?? 'normal') === 'normal' ? 'selected' : '' ?>>Standar (3 px)</option>
+                                    <option value="thick" <?= ($v['kop_line_weight'] ?? '') === 'thick' ? 'selected' : '' ?>>Tebal Tegas (4.5 px)</option>
                                 </select>
                             </div>
                         </div>
@@ -319,7 +462,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 </div>
 
                 <!-- TAB 3: TUJUAN, SALAM & ISI SURAT -->
-                <div class="builder-tab-pane" id="tab-content">
+                <div class="builder-tab-pane" id="tab-content" style="display: none;">
                     <section class="builder-card">
                         <div class="builder-card-title">
                             <span class="section-icon amber"><i class="ri-mail-line"></i></span>
@@ -330,17 +473,57 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         </div>
 
                         <div class="builder-field full">
-                            <label>Tujuan / Penerima Surat (Kepada Yth.) <b>*</b></label>
+                            <div class="field-header-flex">
+                                <label>Tujuan / Penerima Surat (Kepada Yth.) <b>*</b></label>
+                                <div class="size-pill-group">
+                                    <span>Font:</span>
+                                    <select name="recipient_size" id="recipient_size" class="size-select-sm">
+                                        <option value="9.5pt" <?= ($v['recipient_size'] ?? '') === '9.5pt' ? 'selected' : '' ?>>9.5 pt</option>
+                                        <option value="10pt" <?= ($v['recipient_size'] ?? '') === '10pt' ? 'selected' : '' ?>>10 pt</option>
+                                        <option value="10.5pt" <?= ($v['recipient_size'] ?? '') === '10.5pt' ? 'selected' : '' ?>>10.5 pt</option>
+                                        <option value="11pt" <?= ($v['recipient_size'] ?? '11pt') === '11pt' ? 'selected' : '' ?>>11 pt (Standar)</option>
+                                        <option value="11.5pt" <?= ($v['recipient_size'] ?? '') === '11.5pt' ? 'selected' : '' ?>>11.5 pt</option>
+                                        <option value="12pt" <?= ($v['recipient_size'] ?? '') === '12pt' ? 'selected' : '' ?>>12 pt</option>
+                                        <option value="13pt" <?= ($v['recipient_size'] ?? '') === '13pt' ? 'selected' : '' ?>>13 pt</option>
+                                    </select>
+                                </div>
+                            </div>
                             <textarea name="recipient" id="recipient" rows="3" required><?= e($v['recipient']) ?></textarea>
                         </div>
 
                         <div class="builder-field full">
-                            <label>Salam Pembuka</label>
+                            <div class="field-header-flex">
+                                <label>Salam Pembuka</label>
+                                <div class="size-pill-group">
+                                    <span>Font:</span>
+                                    <select name="greeting_opening_size" id="greeting_opening_size" class="size-select-sm">
+                                        <option value="10pt" <?= ($v['greeting_opening_size'] ?? '') === '10pt' ? 'selected' : '' ?>>10 pt</option>
+                                        <option value="10.5pt" <?= ($v['greeting_opening_size'] ?? '') === '10.5pt' ? 'selected' : '' ?>>10.5 pt</option>
+                                        <option value="11pt" <?= ($v['greeting_opening_size'] ?? '') === '11pt' ? 'selected' : '' ?>>11 pt</option>
+                                        <option value="11.5pt" <?= ($v['greeting_opening_size'] ?? '11.5pt') === '11.5pt' ? 'selected' : '' ?>>11.5 pt (Standar)</option>
+                                        <option value="12pt" <?= ($v['greeting_opening_size'] ?? '') === '12pt' ? 'selected' : '' ?>>12 pt</option>
+                                        <option value="13pt" <?= ($v['greeting_opening_size'] ?? '') === '13pt' ? 'selected' : '' ?>>13 pt</option>
+                                    </select>
+                                </div>
+                            </div>
                             <input type="text" name="greeting_opening" id="greeting_opening" value="<?= e($v['greeting_opening']) ?>">
                         </div>
 
                         <div class="builder-field full">
-                            <label>Paragraf Pembuka / Dasar Surat</label>
+                            <div class="field-header-flex">
+                                <label>Paragraf Pembuka / Dasar Surat</label>
+                                <div class="size-pill-group">
+                                    <span>Font:</span>
+                                    <select name="opening_size" id="opening_size" class="size-select-sm">
+                                        <option value="10pt" <?= ($v['opening_size'] ?? '') === '10pt' ? 'selected' : '' ?>>10 pt</option>
+                                        <option value="10.5pt" <?= ($v['opening_size'] ?? '') === '10.5pt' ? 'selected' : '' ?>>10.5 pt</option>
+                                        <option value="11pt" <?= ($v['opening_size'] ?? '') === '11pt' ? 'selected' : '' ?>>11 pt</option>
+                                        <option value="11.5pt" <?= ($v['opening_size'] ?? '11.5pt') === '11.5pt' ? 'selected' : '' ?>>11.5 pt (Standar)</option>
+                                        <option value="12pt" <?= ($v['opening_size'] ?? '') === '12pt' ? 'selected' : '' ?>>12 pt</option>
+                                        <option value="13pt" <?= ($v['opening_size'] ?? '') === '13pt' ? 'selected' : '' ?>>13 pt</option>
+                                    </select>
+                                </div>
+                            </div>
                             <textarea name="opening" id="opening" rows="3"><?= e($v['opening']) ?></textarea>
                         </div>
                     </section>
@@ -354,25 +537,88 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             </div>
                         </div>
 
+                        <div class="builder-grid-2" style="margin-bottom:12px;">
+                            <div class="builder-field">
+                                <label>Ukuran Font Isi Pokok Surat</label>
+                                <select name="body_size" id="body_size">
+                                    <option value="9.5pt" <?= ($v['body_size'] ?? '') === '9.5pt' ? 'selected' : '' ?>>9.5 pt</option>
+                                    <option value="10pt" <?= ($v['body_size'] ?? '') === '10pt' ? 'selected' : '' ?>>10 pt</option>
+                                    <option value="10.5pt" <?= ($v['body_size'] ?? '') === '10.5pt' ? 'selected' : '' ?>>10.5 pt</option>
+                                    <option value="11pt" <?= ($v['body_size'] ?? '') === '11pt' ? 'selected' : '' ?>>11 pt</option>
+                                    <option value="11.5pt" <?= ($v['body_size'] ?? '11.5pt') === '11.5pt' ? 'selected' : '' ?>>11.5 pt (Standar Dinas)</option>
+                                    <option value="12pt" <?= ($v['body_size'] ?? '') === '12pt' ? 'selected' : '' ?>>12 pt</option>
+                                    <option value="13pt" <?= ($v['body_size'] ?? '') === '13pt' ? 'selected' : '' ?>>13 pt</option>
+                                    <option value="14pt" <?= ($v['body_size'] ?? '') === '14pt' ? 'selected' : '' ?>>14 pt</option>
+                                </select>
+                            </div>
+
+                            <div class="builder-field">
+                                <label>Jarak Spasi Baris (Line Height)</label>
+                                <select name="body_line_height" id="body_line_height">
+                                    <option value="1.2" <?= ($v['body_line_height'] ?? '') === '1.2' ? 'selected' : '' ?>>Sangat Rapat (1.2)</option>
+                                    <option value="1.4" <?= ($v['body_line_height'] ?? '') === '1.4' ? 'selected' : '' ?>>Rapat (1.4)</option>
+                                    <option value="1.6" <?= ($v['body_line_height'] ?? '1.6') === '1.6' ? 'selected' : '' ?>>Standar Dinas (1.6 ~ 1.5 spasi)</option>
+                                    <option value="1.8" <?= ($v['body_line_height'] ?? '') === '1.8' ? 'selected' : '' ?>>Longgar (1.8)</option>
+                                    <option value="2.0" <?= ($v['body_line_height'] ?? '') === '2.0' ? 'selected' : '' ?>>Ganda (2.0)</option>
+                                </select>
+                            </div>
+                        </div>
+
                         <div class="builder-field full">
-                            <label>Isi Surat Lengkap <b>*</b></label>
+                            <div class="field-header-flex">
+                                <label>Isi Surat Lengkap <b>*</b></label>
+                                <div class="size-pill-group">
+                                    <span>Spasi Paragraf:</span>
+                                    <select name="paragraph_spacing" id="paragraph_spacing" class="size-select-sm">
+                                        <option value="compact" <?= ($v['paragraph_spacing'] ?? '') === 'compact' ? 'selected' : '' ?>>Rapat (6px)</option>
+                                        <option value="normal" <?= ($v['paragraph_spacing'] ?? 'normal') === 'normal' ? 'selected' : '' ?>>Normal (10px)</option>
+                                        <option value="relaxed" <?= ($v['paragraph_spacing'] ?? '') === 'relaxed' ? 'selected' : '' ?>>Longgar (16px)</option>
+                                    </select>
+                                </div>
+                            </div>
                             <textarea name="body" id="body" rows="8" required><?= e($v['body']) ?></textarea>
                         </div>
 
                         <div class="builder-field full">
-                            <label>Paragraf Penutup</label>
+                            <div class="field-header-flex">
+                                <label>Paragraf Penutup</label>
+                                <div class="size-pill-group">
+                                    <span>Font:</span>
+                                    <select name="closing_size" id="closing_size" class="size-select-sm">
+                                        <option value="10pt" <?= ($v['closing_size'] ?? '') === '10pt' ? 'selected' : '' ?>>10 pt</option>
+                                        <option value="10.5pt" <?= ($v['closing_size'] ?? '') === '10.5pt' ? 'selected' : '' ?>>10.5 pt</option>
+                                        <option value="11pt" <?= ($v['closing_size'] ?? '') === '11pt' ? 'selected' : '' ?>>11 pt</option>
+                                        <option value="11.5pt" <?= ($v['closing_size'] ?? '11.5pt') === '11.5pt' ? 'selected' : '' ?>>11.5 pt (Standar)</option>
+                                        <option value="12pt" <?= ($v['closing_size'] ?? '') === '12pt' ? 'selected' : '' ?>>12 pt</option>
+                                        <option value="13pt" <?= ($v['closing_size'] ?? '') === '13pt' ? 'selected' : '' ?>>13 pt</option>
+                                    </select>
+                                </div>
+                            </div>
                             <textarea name="closing" id="closing" rows="2"><?= e($v['closing']) ?></textarea>
                         </div>
 
                         <div class="builder-field full">
-                            <label>Salam Penutup</label>
+                            <div class="field-header-flex">
+                                <label>Salam Penutup</label>
+                                <div class="size-pill-group">
+                                    <span>Font:</span>
+                                    <select name="greeting_closing_size" id="greeting_closing_size" class="size-select-sm">
+                                        <option value="10pt" <?= ($v['greeting_closing_size'] ?? '') === '10pt' ? 'selected' : '' ?>>10 pt</option>
+                                        <option value="10.5pt" <?= ($v['greeting_closing_size'] ?? '') === '10.5pt' ? 'selected' : '' ?>>10.5 pt</option>
+                                        <option value="11pt" <?= ($v['greeting_closing_size'] ?? '') === '11pt' ? 'selected' : '' ?>>11 pt</option>
+                                        <option value="11.5pt" <?= ($v['greeting_closing_size'] ?? '11.5pt') === '11.5pt' ? 'selected' : '' ?>>11.5 pt (Standar)</option>
+                                        <option value="12pt" <?= ($v['greeting_closing_size'] ?? '') === '12pt' ? 'selected' : '' ?>>12 pt</option>
+                                        <option value="13pt" <?= ($v['greeting_closing_size'] ?? '') === '13pt' ? 'selected' : '' ?>>13 pt</option>
+                                    </select>
+                                </div>
+                            </div>
                             <input type="text" name="greeting_closing" id="greeting_closing" value="<?= e($v['greeting_closing']) ?>">
                         </div>
                     </section>
                 </div>
 
                 <!-- TAB 4: TANDA TANGAN & CAP -->
-                <div class="builder-tab-pane" id="tab-sign">
+                <div class="builder-tab-pane" id="tab-sign" style="display: none;">
                     <section class="builder-card">
                         <div class="builder-card-title">
                             <span class="section-icon violet"><i class="ri-quill-pen-line"></i></span>
@@ -388,16 +634,78 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                 <input type="text" name="city" id="city" value="<?= e($v['city']) ?>">
                             </div>
                             <div class="builder-field">
-                                <label>Jabatan Penandatangan <b>*</b></label>
+                                <div class="field-header-flex">
+                                    <label>Jabatan Penandatangan <b>*</b></label>
+                                    <div class="size-pill-group">
+                                        <span>Font:</span>
+                                        <select name="signer_position_size" id="signer_position_size" class="size-select-sm">
+                                            <option value="10pt" <?= ($v['signer_position_size'] ?? '') === '10pt' ? 'selected' : '' ?>>10 pt</option>
+                                            <option value="10.5pt" <?= ($v['signer_position_size'] ?? '') === '10.5pt' ? 'selected' : '' ?>>10.5 pt</option>
+                                            <option value="11pt" <?= ($v['signer_position_size'] ?? '') === '11pt' ? 'selected' : '' ?>>11 pt</option>
+                                            <option value="11.5pt" <?= ($v['signer_position_size'] ?? '11.5pt') === '11.5pt' ? 'selected' : '' ?>>11.5 pt (Standar)</option>
+                                            <option value="12pt" <?= ($v['signer_position_size'] ?? '') === '12pt' ? 'selected' : '' ?>>12 pt</option>
+                                            <option value="13pt" <?= ($v['signer_position_size'] ?? '') === '13pt' ? 'selected' : '' ?>>13 pt</option>
+                                        </select>
+                                    </div>
+                                </div>
                                 <input type="text" name="signer_position" id="signer_position" value="<?= e($v['signer_position']) ?>" required>
                             </div>
                             <div class="builder-field">
-                                <label>Nama Lengkap Pejabat <b>*</b></label>
+                                <div class="field-header-flex">
+                                    <label>Nama Lengkap Pejabat <b>*</b></label>
+                                    <div class="size-pill-group">
+                                        <span>Font:</span>
+                                        <select name="signer_name_size" id="signer_name_size" class="size-select-sm">
+                                            <option value="10.5pt" <?= ($v['signer_name_size'] ?? '') === '10.5pt' ? 'selected' : '' ?>>10.5 pt</option>
+                                            <option value="11pt" <?= ($v['signer_name_size'] ?? '') === '11pt' ? 'selected' : '' ?>>11 pt</option>
+                                            <option value="11.5pt" <?= ($v['signer_name_size'] ?? '') === '11.5pt' ? 'selected' : '' ?>>11.5 pt</option>
+                                            <option value="12pt" <?= ($v['signer_name_size'] ?? '12pt') === '12pt' ? 'selected' : '' ?>>12 pt (Standar)</option>
+                                            <option value="13pt" <?= ($v['signer_name_size'] ?? '') === '13pt' ? 'selected' : '' ?>>13 pt</option>
+                                            <option value="14pt" <?= ($v['signer_name_size'] ?? '') === '14pt' ? 'selected' : '' ?>>14 pt</option>
+                                        </select>
+                                    </div>
+                                </div>
                                 <input type="text" name="signer_name" id="signer_name" value="<?= e($v['signer_name']) ?>" required>
                             </div>
                             <div class="builder-field">
-                                <label>NIP / NIDN Pejabat</label>
+                                <div class="field-header-flex">
+                                    <label>NIP / NIDN Pejabat</label>
+                                    <div class="size-pill-group">
+                                        <span>Font:</span>
+                                        <select name="signer_number_size" id="signer_number_size" class="size-select-sm">
+                                            <option value="8.5pt" <?= ($v['signer_number_size'] ?? '') === '8.5pt' ? 'selected' : '' ?>>8.5 pt</option>
+                                            <option value="9pt" <?= ($v['signer_number_size'] ?? '') === '9pt' ? 'selected' : '' ?>>9 pt</option>
+                                            <option value="9.5pt" <?= ($v['signer_number_size'] ?? '') === '9.5pt' ? 'selected' : '' ?>>9.5 pt</option>
+                                            <option value="10pt" <?= ($v['signer_number_size'] ?? '10pt') === '10pt' ? 'selected' : '' ?>>10 pt (Standar)</option>
+                                            <option value="10.5pt" <?= ($v['signer_number_size'] ?? '') === '10.5pt' ? 'selected' : '' ?>>10.5 pt</option>
+                                            <option value="11pt" <?= ($v['signer_number_size'] ?? '') === '11pt' ? 'selected' : '' ?>>11 pt</option>
+                                        </select>
+                                    </div>
+                                </div>
                                 <input type="text" name="signer_number" id="signer_number" value="<?= e($v['signer_number']) ?>">
+                            </div>
+                        </div>
+
+                        <div class="builder-grid-2" style="margin-top:8px;">
+                            <div class="builder-field">
+                                <label>Tinggi Ruang Tanda Tangan</label>
+                                <select name="signature_space_height" id="signature_space_height">
+                                    <option value="45px" <?= ($v['signature_space_height'] ?? '') === '45px' ? 'selected' : '' ?>>Kecil / Ringkas (45 px)</option>
+                                    <option value="65px" <?= ($v['signature_space_height'] ?? '') === '65px' ? 'selected' : '' ?>>Sedang (65 px)</option>
+                                    <option value="80px" <?= ($v['signature_space_height'] ?? '80px') === '80px' ? 'selected' : '' ?>>Standar Resmi (80 px)</option>
+                                    <option value="100px" <?= ($v['signature_space_height'] ?? '') === '100px' ? 'selected' : '' ?>>Tinggi (100 px)</option>
+                                    <option value="120px" <?= ($v['signature_space_height'] ?? '') === '120px' ? 'selected' : '' ?>>Ekstra Tinggi (120 px)</option>
+                                </select>
+                            </div>
+
+                            <div class="builder-field">
+                                <label>Ukuran Gambar Tanda Tangan</label>
+                                <select name="signature_size" id="signature_size">
+                                    <option value="small" <?= ($v['signature_size'] ?? '') === 'small' ? 'selected' : '' ?>>Kecil (50 px)</option>
+                                    <option value="medium" <?= ($v['signature_size'] ?? 'medium') === 'medium' ? 'selected' : '' ?>>Sedang (70 px)</option>
+                                    <option value="large" <?= ($v['signature_size'] ?? '') === 'large' ? 'selected' : '' ?>>Besar (90 px)</option>
+                                    <option value="xlarge" <?= ($v['signature_size'] ?? '') === 'xlarge' ? 'selected' : '' ?>>Ekstra Besar (110 px)</option>
+                                </select>
                             </div>
                         </div>
 
@@ -453,13 +761,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             </div>
                         </div>
 
-                        <div class="builder-grid-2">
+                        <div class="builder-grid-3">
                             <div class="builder-field">
                                 <label>Posisi Stempel</label>
                                 <select name="stamp_position" id="stamp_position">
                                     <option value="left" <?= ($v['stamp_position'] ?? 'left') === 'left' ? 'selected' : '' ?>>Kiri Menimpa TTD</option>
                                     <option value="center" <?= ($v['stamp_position'] ?? '') === 'center' ? 'selected' : '' ?>>Tengah TTD</option>
                                     <option value="right" <?= ($v['stamp_position'] ?? '') === 'right' ? 'selected' : '' ?>>Kanan TTD</option>
+                                </select>
+                            </div>
+                            <div class="builder-field">
+                                <label>Ukuran Diameter Cap</label>
+                                <select name="stamp_size" id="stamp_size">
+                                    <option value="small" <?= ($v['stamp_size'] ?? '') === 'small' ? 'selected' : '' ?>>Kecil (65 px)</option>
+                                    <option value="medium" <?= ($v['stamp_size'] ?? 'medium') === 'medium' ? 'selected' : '' ?>>Sedang (85 px)</option>
+                                    <option value="large" <?= ($v['stamp_size'] ?? '') === 'large' ? 'selected' : '' ?>>Besar (105 px)</option>
+                                    <option value="xlarge" <?= ($v['stamp_size'] ?? '') === 'xlarge' ? 'selected' : '' ?>>Ekstra Besar (125 px)</option>
                                 </select>
                             </div>
                             <div class="builder-field">
@@ -482,11 +799,37 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         </div>
 
                         <div class="builder-field full">
-                            <label>Tembusan</label>
+                            <div class="field-header-flex">
+                                <label>Tembusan</label>
+                                <div class="size-pill-group">
+                                    <span>Font:</span>
+                                    <select name="copies_size" id="copies_size" class="size-select-sm">
+                                        <option value="8.5pt" <?= ($v['copies_size'] ?? '') === '8.5pt' ? 'selected' : '' ?>>8.5 pt</option>
+                                        <option value="9pt" <?= ($v['copies_size'] ?? '') === '9pt' ? 'selected' : '' ?>>9 pt</option>
+                                        <option value="9.5pt" <?= ($v['copies_size'] ?? '') === '9.5pt' ? 'selected' : '' ?>>9.5 pt</option>
+                                        <option value="10pt" <?= ($v['copies_size'] ?? '10pt') === '10pt' ? 'selected' : '' ?>>10 pt (Standar)</option>
+                                        <option value="10.5pt" <?= ($v['copies_size'] ?? '') === '10.5pt' ? 'selected' : '' ?>>10.5 pt</option>
+                                        <option value="11pt" <?= ($v['copies_size'] ?? '') === '11pt' ? 'selected' : '' ?>>11 pt</option>
+                                    </select>
+                                </div>
+                            </div>
                             <textarea name="copies" id="copies" rows="3"><?= e($v['copies']) ?></textarea>
                         </div>
                         <div class="builder-field full">
-                            <label>Catatan Kaki Dokumen</label>
+                            <div class="field-header-flex">
+                                <label>Catatan Kaki Dokumen</label>
+                                <div class="size-pill-group">
+                                    <span>Font:</span>
+                                    <select name="footer_size" id="footer_size" class="size-select-sm">
+                                        <option value="7.5pt" <?= ($v['footer_size'] ?? '') === '7.5pt' ? 'selected' : '' ?>>7.5 pt</option>
+                                        <option value="8pt" <?= ($v['footer_size'] ?? '') === '8pt' ? 'selected' : '' ?>>8 pt</option>
+                                        <option value="8.5pt" <?= ($v['footer_size'] ?? '8.5pt') === '8.5pt' ? 'selected' : '' ?>>8.5 pt (Standar)</option>
+                                        <option value="9pt" <?= ($v['footer_size'] ?? '') === '9pt' ? 'selected' : '' ?>>9 pt</option>
+                                        <option value="9.5pt" <?= ($v['footer_size'] ?? '') === '9.5pt' ? 'selected' : '' ?>>9.5 pt</option>
+                                        <option value="10pt" <?= ($v['footer_size'] ?? '') === '10pt' ? 'selected' : '' ?>>10 pt</option>
+                                    </select>
+                                </div>
+                            </div>
                             <input type="text" name="footer_note" id="footer_note" value="<?= e($v['footer_note']) ?>">
                         </div>
                     </section>
@@ -505,13 +848,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     <div class="preview-bar">
                         <div class="preview-bar-title"><i class="ri-eye-line" style="color:var(--primary);"></i><span>Pratinjau Lembar A4</span></div>
                         <div class="preview-bar-actions">
-                            <button type="button" id="zoomOutBtn"><i class="ri-subtract-line"></i></button>
+                            <button type="button" id="zoomOutBtn" title="Perkecil" onclick="window.applyA4Zoom(-10); return false;"><i class="ri-subtract-line"></i></button>
                             <b id="zoomLabel">100%</b>
-                            <button type="button" id="zoomInBtn"><i class="ri-add-line"></i></button>
-                            <button type="button" id="zoomResetBtn" style="width:auto;padding:0 8px;font-size:11px;font-weight:700;">Reset</button>
+                            <button type="button" id="zoomInBtn" title="Perbesar" onclick="window.applyA4Zoom(10); return false;"><i class="ri-add-line"></i></button>
+                            <button type="button" id="zoomResetBtn" title="Reset Zoom" style="width:auto;padding:0 8px;font-size:11px;font-weight:700;" onclick="window.resetA4Zoom(); return false;">Reset</button>
                         </div>
                     </div>
-                    <div class="a4-viewport">
+                    <div class="a4-viewport" id="a4Viewport">
                         <div class="a4-sheet" id="a4Sheet">
                             <table class="a4-kop-table" id="a4KopTable">
                                 <tr>
@@ -583,172 +926,3 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         </div>
     </form>
 </div>
-
-<script>
-window.switchBuilderTab = function(idx) {
-    const paneIds = ['tab-meta', 'tab-kop', 'tab-content', 'tab-sign'];
-    const btns = document.querySelectorAll('.builder-tab-btn');
-    const panes = document.querySelectorAll('.builder-tab-pane');
-
-    btns.forEach((b, i) => {
-        if (i === idx) {
-            b.classList.add('active');
-        } else {
-            b.classList.remove('active');
-        }
-    });
-
-    paneIds.forEach((pid, i) => {
-        const pane = document.getElementById(pid);
-        if (pane) {
-            if (i === idx) {
-                pane.classList.add('active');
-                pane.style.display = 'block';
-            } else {
-                pane.classList.remove('active');
-                pane.style.display = 'none';
-            }
-        }
-    });
-
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-};
-
-document.addEventListener('click', function(e) {
-    const btn = e.target.closest('.builder-tab-btn');
-    if (!btn) return;
-    const tabNav = btn.closest('.builder-tabs-nav');
-    if (!tabNav) return;
-    const allBtns = Array.from(tabNav.querySelectorAll('.builder-tab-btn'));
-    const idx = allBtns.indexOf(btn);
-    if (idx !== -1) {
-        window.switchBuilderTab(idx);
-    }
-});
-
-    const workbench = document.getElementById('builderWorkbench');
-    document.querySelectorAll('[data-view-mode]').forEach(btn => {
-        btn.addEventListener('click', () => {
-            document.querySelectorAll('[data-view-mode]').forEach(b => b.classList.remove('active'));
-            btn.classList.add('active');
-            workbench.classList.remove('view-form-only', 'view-preview-only');
-            if (btn.dataset.viewMode === 'form') workbench.classList.add('view-form-only');
-            if (btn.dataset.viewMode === 'preview') workbench.classList.add('view-preview-only');
-        });
-    });
-
-    let currentZoom = 100;
-    const a4Sheet = document.getElementById('a4Sheet');
-    const zoomLabel = document.getElementById('zoomLabel');
-    function applyZoom(z) {
-        currentZoom = Math.min(140, Math.max(60, z));
-        a4Sheet.style.transform = `scale(${currentZoom / 100})`;
-        zoomLabel.textContent = `${currentZoom}%`;
-    }
-    document.getElementById('zoomInBtn')?.addEventListener('click', () => applyZoom(currentZoom + 10));
-    document.getElementById('zoomOutBtn')?.addEventListener('click', () => applyZoom(currentZoom - 10));
-    document.getElementById('zoomResetBtn')?.addEventListener('click', () => applyZoom(100));
-
-    function updateA4() {
-        document.getElementById('a4KopInst1').textContent = document.getElementById('kop_inst1').value;
-        document.getElementById('a4KopInst2').textContent = document.getElementById('kop_inst2').value;
-        document.getElementById('a4KopAddress').textContent = document.getElementById('kop_address').value;
-        document.getElementById('a4KopContact').textContent = document.getElementById('kop_contact').value;
-
-        const kopAlign = document.querySelector('input[name="kop_align"]:checked')?.value || 'center';
-        document.getElementById('a4KopTextCell').style.textAlign = kopAlign;
-
-        const fontFamily = document.querySelector('input[name="font_family"]:checked')?.value || 'serif';
-        a4Sheet.style.fontFamily = fontFamily === 'sans' ? '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif' : '"Times New Roman", Times, Georgia, serif';
-
-        const lineStyle = document.querySelector('input[name="kop_line_style"]:checked')?.value || 'double';
-        const lineEl = document.getElementById('a4KopLine');
-        lineEl.className = lineStyle === 'single_thick' ? 'a4-line-single-thick' : (lineStyle === 'single_thin' ? 'a4-line-single-thin' : (lineStyle === 'dashed' ? 'a4-line-dashed' : (lineStyle === 'none' ? 'a4-line-none' : 'a4-line-double')));
-
-        document.getElementById('a4Number').textContent = document.getElementById('custom_number').value || '[Nomor Surat]';
-        document.getElementById('a4Confidentiality').textContent = document.getElementById('confidentiality').value;
-        document.getElementById('a4Attachment').textContent = document.getElementById('attachment').value || '-';
-        document.getElementById('a4Title').textContent = document.getElementById('title').value;
-
-        const city = document.getElementById('city').value.trim();
-        const docDate = document.getElementById('document_date').value;
-        document.getElementById('a4DateCity').textContent = city ? `${city}, ${docDate}` : docDate;
-
-        document.getElementById('a4Recipient').textContent = document.getElementById('recipient').value;
-        document.getElementById('a4GreetingOpening').textContent = document.getElementById('greeting_opening').value;
-        document.getElementById('a4Opening').textContent = document.getElementById('opening').value;
-        document.getElementById('a4Body').textContent = document.getElementById('body').value;
-        document.getElementById('a4Closing').textContent = document.getElementById('closing').value;
-        document.getElementById('a4GreetingClosing').textContent = document.getElementById('greeting_closing').value;
-
-        document.getElementById('a4SignPosition').textContent = document.getElementById('signer_position').value;
-        document.getElementById('a4SignName').textContent = document.getElementById('signer_name').value;
-        document.getElementById('a4SignNip').textContent = document.getElementById('signer_number').value;
-
-        const stampPos = document.getElementById('stamp_position').value;
-        const stampEl = document.getElementById('a4StampImg');
-        stampEl.className = 'a4-stamp-img a4-stamp-' + stampPos;
-        stampEl.style.opacity = (parseInt(document.getElementById('stamp_opacity').value || '85') / 100);
-
-        const copies = document.getElementById('copies').value.trim();
-        document.getElementById('a4CopiesWrap').style.display = copies ? 'block' : 'none';
-        document.getElementById('a4Copies').textContent = copies;
-
-        const footer = document.getElementById('footer_note').value.trim();
-        document.getElementById('a4FooterNoteWrap').style.display = footer ? 'flex' : 'none';
-        document.getElementById('a4FooterNote').textContent = footer;
-    }
-
-    const formInputs = document.querySelectorAll('#letterBuilderForm input:not([type="file"]), #letterBuilderForm select, #letterBuilderForm textarea');
-    formInputs.forEach(input => {
-        input.addEventListener('input', updateA4);
-        input.addEventListener('change', updateA4);
-    });
-
-    document.querySelectorAll('.pill-opt input[type="radio"]').forEach(radio => {
-        radio.addEventListener('change', () => {
-            const name = radio.name;
-            document.querySelectorAll(`input[name="${name}"]`).forEach(r => {
-                r.closest('.pill-opt')?.classList.toggle('selected', r.checked);
-            });
-            updateA4();
-        });
-    });
-
-    function handleImg(fileInput, base64Input, previewBox, a4Img, removeBtn) {
-        fileInput?.addEventListener('change', () => {
-            const file = fileInput.files[0];
-            if (!file) return;
-            const reader = new FileReader();
-            reader.onload = (e) => {
-                const b64 = e.target.result;
-                base64Input.value = b64;
-                previewBox.innerHTML = `<img src="${b64}">`;
-                a4Img.src = b64;
-                a4Img.style.display = 'inline-block';
-                if (removeBtn) removeBtn.style.display = 'inline-flex';
-                if (a4Img.id === 'a4LogoLeftImg') document.getElementById('a4LogoLeftCell').style.display = 'table-cell';
-                updateA4();
-            };
-            reader.readAsDataURL(file);
-        });
-
-        removeBtn?.addEventListener('click', () => {
-            fileInput.value = '';
-            base64Input.value = '';
-            previewBox.innerHTML = `<span class="placeholder-icon"><i class="ri-image-add-line"></i></span>`;
-            a4Img.src = '';
-            a4Img.style.display = 'none';
-            removeBtn.style.display = 'none';
-            if (a4Img.id === 'a4LogoLeftImg') document.getElementById('a4LogoLeftCell').style.display = 'none';
-            updateA4();
-        });
-    }
-
-    handleImg(document.getElementById('logoFileInput'), document.getElementById('logo_base64'), document.getElementById('logoPreviewBox'), document.getElementById('a4LogoLeftImg'), document.getElementById('removeLogoBtn'));
-    handleImg(document.getElementById('signFileInput'), document.getElementById('signature_base64'), document.getElementById('signPreviewBox'), document.getElementById('a4SignImg'), document.getElementById('removeSignBtn'));
-    handleImg(document.getElementById('stampFileInput'), document.getElementById('stamp_base64'), document.getElementById('stampPreviewBox'), document.getElementById('a4StampImg'), document.getElementById('removeStampBtn'));
-
-    updateA4();
-});
-</script>

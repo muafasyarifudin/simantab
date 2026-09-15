@@ -324,22 +324,29 @@ MVP wajib menyelesaikan tiga jenis pertama. Jenis lainnya menggunakan mesin temp
 - Menetapkan unit induk dan cakupan akses.
 - Menonaktifkan unit tanpa menghapus histori.
 
-### FR-04 Template surat
+### FR-04 Template & Studio Pembuat Surat (Studio Builder)
 
-- Administrator dapat membuat template per jenis surat dan unit.
-- Template memiliki bagian wajib dan opsional.
-- Mendukung placeholder seperti nomor, tanggal, nama pejabat, dan unit.
-- Mendukung kop, footer, margin, font, tanda tangan, stempel, serta lampiran.
-- Template lama tetap digunakan oleh surat historis.
+- Administrator dan pembuat surat dapat menyesuaikan template per jenis surat dan unit secara visual (*live preview A4*).
+- **Kustomisasi Ukuran Menyeluruh (Full-Grain Size Customization):**
+  - **KOP & Header:** Ukuran font 3 tingkatan instansi (11pt - 20pt), alamat (7.5pt - 10pt), kontak (7pt - 10pt), perataan (tengah/kiri), gaya huruf (serif/sans-serif), margin kertas A4 (compact 1.8cm, normal 2.5cm, spacious 3.2cm), jarak spasi KOP (compact/normal/spacious), ketebalan garis (thin/normal/thick), dan gaya garis (ganda, tunggal tebal, tunggal tipis, dashed, none).
+  - **Identitas & Metadata:** Font size judul heading (12pt - 18pt), font metadata nomor/sifat/hal (9.5pt - 12pt), dan font tanggal terbit.
+  - **Tujuan & Isi Surat:** Font size penerima (Yth.), salam pembuka, paragraf pembuka, isi pokok surat (9.5pt - 14pt), jarak spasi baris (*line height* 1.2 hingga 2.0), spasi antar-paragraf (compact/normal/relaxed), paragraf penutup, dan salam penutup.
+  - **Tanda Tangan, Cap & Footer:** Font size jabatan penandatangan, nama pejabat, NIP/NIDN/NBM, tinggi ruang tanda tangan (45px - 120px), dimensi gambar tanda tangan, diameter stempel dinas (65px - 125px), opasitas stempel (70% - 100%), font size tembusan, dan catatan kaki (*footer note*).
+- Mendukung placeholder dinamis seperti nomor, tanggal, nama pejabat, dan unit kerja.
+- Template lama tetap dipertahankan dan terisolasi untuk surat historis.
 
-### FR-05 Pembuatan draf
+### FR-05 Pembuatan Draf & Auto-Save Cerdas
 
-- Formulir disusun berdasarkan jenis dokumen.
-- Draf tersimpan otomatis.
-- Pengguna dapat melanjutkan draf dari perangkat berbeda.
+- Formulir disusun berdasarkan jenis dokumen dengan antarmuka kerja 2-kolom (*split workbench*), form saja, atau kertas A4 saja.
+- **Auto-Save Lokal Bebas Beban Server (Zero-Lag Debounced Local Auto-Save):**
+  - Penyimpanan draf otomatis secara berkala ke `localStorage` peramban dengan mekanisme *debounce* 280ms tanpa mengirim permintaan HTTP berulang ke server saat mengetik.
+  - Menghilangkan latensi jaringan, beban I/O database, dan risiko MySQL server packet lock saat perancangan draf surat yang panjang.
+- **Deteksi & Pemulihan Draf (Draft Recovery):**
+  - Sistem mendeteksi otomatis draf sesi sebelumnya yang belum disimpan saat membuka editor, menampilkan banner pemulihan dengan opsi *Pulihkan Draf* atau *Buang Draf*.
+  - Pembersihan draf lokal otomatis ketika formulir berhasil disubmit ke database.
 - Pengguna dapat menduplikasi surat lama menjadi draf baru.
-- Sistem menampilkan daftar bagian yang belum lengkap.
-- Pengguna dapat melihat pratinjau sebelum mengajukan.
+- Sistem menampilkan validasi data wajib sebelum dokumen dapat diajukan ke tahap verifikasi.
+- Pratinjau lembar kerja A4 dinamis (*two-way live binding*) dengan fitur zoom (60% - 140%).
 
 ### FR-06 Surat Tugas
 

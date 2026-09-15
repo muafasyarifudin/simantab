@@ -6,6 +6,23 @@ Format pencatatan mengacu pada [Keep a Changelog](https://keepachangelog.com/id/
 
 ---
 
+## [1.2.1] - 2026-09-15
+
+### 🚀 Ditambahkan (Added)
+- **Kustomisasi Ukuran Menyeluruh (Full-Grain Size Customization):**
+  - Opsi pemilihan ukuran font, jarak baris, margin, dan dimensi untuk **seluruh elemen surat**:
+    - **Header & KOP:** Judul heading naskah, nama lembaga induk (baris 1), satker/fakultas (baris 2), alamat, kontak, margin lembar A4 (compact, normal, spacious), jarak spasi KOP, dan ketebalan garis pembatas.
+    - **Identitas & Metadata:** Font size metadata (nomor, sifat, lampiran, perihal) dan ukuran font tanggal surat.
+    - **Tujuan & Isi Surat:** Font size penerima (Yth.), salam pembuka, paragraf pembuka, isi pokok surat, spasi antar-paragraf, jarak spasi baris (*line height* 1.2 hingga 2.0), paragraf penutup, dan salam penutup.
+    - **Tanda Tangan, Cap & Footer:** Font size jabatan, nama pejabat, NIP/NIDN/NBM, tinggi ruang tanda tangan (45px - 120px), dimensi gambar tanda tangan, diameter stempel dinas, opasitas cap (70% - 100%), font size tembusan, dan catatan kaki (*footer note*).
+- **Auto-Save Lokal Canggih Tanpa Beban Server (Zero-Lag Debounced Local Auto-Save):**
+  - Penyimpanan draf otomatis secara instan ke `localStorage` peramban dengan debounce 280ms.
+  - **Bebas Beban Server:** Tidak mengirim HTTP request/I-O database saat pengguna mengetik, menjaga server tetap ringan dan bebas lag.
+  - **Deteksi & Pemulihan Draf (Draft Recovery Banner):** Notifikasi pintar otomatis saat membuka menu *Buat Surat* jika ada draf yang belum disimpan dari sesi sebelumnya, lengkap dengan tombol *Pulihkan Draf* dan *Buang Draf*.
+  - Pembersihan draf lokal otomatis ketika formulir berhasil disubmit ke database.
+
+---
+
 ## [1.2.0] - 2026-09-15
 
 ### 🚀 Ditambahkan (Added)
